@@ -1,0 +1,322 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts     Account[]
+  sessions     Session[]
+  profiles     UserProfile[]
+  savedBuilds  SavedBuild[]
+  feedbacks    Feedback[]
+  blogPosts    BlogPost[]
+  guides       Guide[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+model UserProfile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  username  String?
+  bio       String?  @db.Text
+  discordId String?
+  gameId    String?
+  kingdom   String?
+  alliance  String?
+  power     BigInt?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+model SavedBuild {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  type      String
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("saved_builds")
+}
+
+model Calculator {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String   @db.Text
+  icon        String
+  category    String
+  data        Json?
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("calculators")
+}
+
+model Hero {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  rarity    String
+  type      String
+  shards    Json?
+  skills    Json?
+  gear      Json?
+  stats     Json?
+  image     String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("heroes")
+}
+
+model Building {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  type      String
+  maxLevel  Int      @default(30)
+  costs     Json?
+  unlocks   Json?
+  bonuses   Json?
+  image     String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("buildings")
+}
+
+model Equipment {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  type      String
+  rarity    String
+  piece     String
+  maxLevel  Int      @default(58)
+  costs     Json?
+  stats     Json?
+  image     String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("equipment")
+}
+
+model Pet {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  type      String
+  maxLevel  Int      @default(50)
+  skill     String?  @db.Text
+  costs     Json?
+  stats     Json?
+  image     String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pets")
+}
+
+model Master {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  title     String?
+  skills    Json?
+  talent    Json?
+  levels    Json?
+  image     String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("masters")
+}
+
+model TechResearch {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  category  String
+  tier      Int
+  costs     Json?
+  bonuses   Json?
+  prerequisites String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tech_research")
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String   @db.Text
+  excerpt   String?  @db.Text
+  category  String?
+  tags      String[]
+  image     String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@map("blog_posts")
+}
+
+model Guide {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String   @db.Text
+  excerpt   String?  @db.Text
+  category  String?
+  difficulty String?
+  image     String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@map("guides")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  type        String
+  startDate   DateTime?
+  endDate     DateTime?
+  rewards     Json?
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  content   String   @db.Text
+  status    String   @default("pending")
+  votes     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("feedback")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  content   String?  @db.Text
+  type      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model Changelog {
+  id        String   @id @default(cuid())
+  version   String
+  title     String
+  content   String   @db.Text
+  type      String   @default("update")
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("changelogs")
+}

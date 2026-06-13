@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: su8l-postgres
+    environment:
+      POSTGRES_USER: su8l
+      POSTGRES_PASSWORD: su8l_secret
+      POSTGRES_DB: su8ldevs
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: su8l-app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://su8l:su8l_secret@postgres:5432/su8ldevs"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "your-secret-key-change-in-production"
+      DISCORD_CLIENT_ID: ""
+      DISCORD_CLIENT_SECRET: ""
+      GOOGLE_CLIENT_ID: ""
+      GOOGLE_CLIENT_SECRET: ""
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
