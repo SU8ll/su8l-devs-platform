@@ -1,19 +1,35 @@
 "use client"
 import { motion } from "framer-motion"
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { GlassCard, GlassCardContent, GlassCardTitle } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
+import { useLocale } from "@/components/language-provider"
 import { SITE_NAME } from "@/lib/constants"
 
-export default function LoginPage() {
+function LoginForm() {
+  const { t } = useLocale()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [message, setMessage] = useState<{ type: "success" | "info"; text: string } | null>(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    if (searchParams.get("verified") === "true") {
+      setMessage({ type: "success", text: t("login.verified") })
+    } else if (searchParams.get("error") === "invalid_token") {
+      setError(t("login.invalidLink"))
+    } else if (searchParams.get("error") === "expired_token") {
+      setError(t("login.expiredLink"))
+    } else if (searchParams.get("error") === "verification_failed") {
+      setError(t("login.failed"))
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,8 +42,11 @@ export default function LoginPage() {
       redirect: false,
     })
 
-    if (result?.error) {
-      setError("Invalid email or password")
+    if (result?.error === "EmailNotVerified") {
+      setError(t("login.verifyFirst"))
+      setLoading(false)
+    } else if (result?.error) {
+      setError(t("login.error"))
       setLoading(false)
     } else {
       router.push("/dashboard")
@@ -47,11 +66,16 @@ export default function LoginPage() {
               <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[#00c8ff] to-[#7c3aed] flex items-center justify-center text-xl font-bold">
                 S
               </div>
-              <h1 className="text-2xl font-bold">Welcome Back</h1>
-              <p className="text-[#a0a0b0] text-sm mt-1">Sign in to {SITE_NAME}</p>
+              <h1 className="text-2xl font-bold">{t("login.title")}</h1>
+              <p className="text-[#a0a0b0] text-sm mt-1">{t("login.subtitle").replace("{name}", SITE_NAME)}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {message && (
+                <div className={`p-3 rounded-lg text-sm ${message.type === "success" ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" : "bg-blue-500/10 border border-blue-500/20 text-blue-400"}`}>
+                  {message.text}
+                </div>
+              )}
               {error && (
                 <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
                   {error}
@@ -59,7 +83,7 @@ export default function LoginPage() {
               )}
 
               <div>
-                <label className="block text-sm text-[#a0a0b0] mb-1">Email</label>
+                <label className="block text-sm text-[#a0a0b0] mb-1">{t("login.email")}</label>
                 <input
                   type="email"
                   value={email}
@@ -71,7 +95,7 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-sm text-[#a0a0b0] mb-1">Password</label>
+                <label className="block text-sm text-[#a0a0b0] mb-1">{t("login.password")}</label>
                 <input
                   type="password"
                   value={password}
@@ -83,7 +107,7 @@ export default function LoginPage() {
               </div>
 
               <Button type="submit" loading={loading} className="w-full">
-                Sign In
+                {t("login.signIn")}
               </Button>
             </form>
 
@@ -92,7 +116,7 @@ export default function LoginPage() {
                 <div className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-4 bg-[#0d0d1a] text-[#a0a0b0]">or continue with</span>
+                <span className="px-4 bg-[#0d0d1a] text-[#a0a0b0]">{t("login.orContinue")}</span>
               </div>
             </div>
 
@@ -121,14 +145,22 @@ export default function LoginPage() {
             </div>
 
             <p className="text-center text-sm text-[#a0a0b0] mt-6">
-              Don&apos;t have an account?{" "}
+              {t("login.noAccount")}{" "}
               <Link href="/register" className="text-[#00c8ff] hover:underline">
-                Sign up
+                {t("login.signUp")}
               </Link>
             </p>
           </GlassCardContent>
         </GlassCard>
       </motion.div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-[#00c8ff] border-t-transparent rounded-full animate-spin" /></div>}>
+      <LoginForm />
+    </Suspense>
   )
 }

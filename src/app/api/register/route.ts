@@ -19,13 +19,6 @@ export async function POST(req: Request) {
       )
     }
 
-    if (!process.env.DATABASE_URL) {
-      return NextResponse.json(
-        { error: "Database not configured. Registration is unavailable." },
-        { status: 503 }
-      )
-    }
-
     const { prisma } = await import("@/lib/prisma")
 
     const existing = await prisma.user.findUnique({ where: { email } })
@@ -38,16 +31,17 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name: name || email.split("@")[0],
         email,
         password: hashedPassword,
+        emailVerified: new Date(),
       },
     })
 
     return NextResponse.json(
-      { message: "Account created successfully", userId: user.id },
+      { message: "Account created successfully" },
       { status: 201 }
     )
   } catch (error) {

@@ -1,18 +1,17 @@
-export const SITE_NAME = "SU8L DEVs"
-export const SITE_DESCRIPTION = "Premium Gaming Companion Platform"
+export const SITE_NAME = "SU8L DEvs"
+export const SITE_DESCRIPTION = "Driven by your Feedback"
 export const SITE_URL = "https://su8ldevs.netlify.app"
 
 export const NAV_ITEMS = [
   { href: "/", label: "Home" },
-  { href: "/tools/calculators", label: "Calculators" },
-  { href: "/tools/database", label: "Database" },
-  { href: "/tools/planning", label: "Planning" },
-  { href: "/tools/interactive", label: "Interactive" },
-  { href: "/events", label: "Events" },
-  { href: "/guides", label: "Guides" },
+  { href: "/su8l-system", label: "SU8L System" },
+  { href: "/kingshot", label: "Kingshot" },
+  { href: "/projects", label: "Projects" },
   { href: "/blog", label: "Blog" },
   { href: "/community", label: "Community" },
   { href: "/changelog", label: "Changelog" },
+  { href: "/legal/terms", label: "Terms" },
+  { href: "/legal/privacy", label: "Privacy" },
 ]
 
 export const CALCULATOR_LIST = [

@@ -3,12 +3,15 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { NAV_ITEMS, SITE_NAME } from "@/lib/constants"
+import { NAV_ITEMS } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useLocale } from "@/components/language-provider"
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
+  const { t } = useLocale()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -18,7 +21,7 @@ export function Header() {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00c8ff] to-[#7c3aed] flex items-center justify-center text-sm font-bold">
             S
           </div>
-          <span className="font-bold text-lg hidden sm:block">{SITE_NAME}</span>
+          <span className="font-bold text-lg hidden sm:block">SU8L DEvs</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
@@ -33,33 +36,34 @@ export function Header() {
                   : "text-[#a0a0b0] hover:text-white hover:bg-white/5"
               )}
             >
-              {item.label}
-            </Link>
-          ))}
-          <div className="group relative">
-            <button className="px-3 py-2 rounded-lg text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5 transition-colors">
-              More ▾
-            </button>
-            <div className="absolute top-full right-0 mt-1 w-48 py-2 glass-card opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-              {NAV_ITEMS.slice(6).map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block px-4 py-2 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5"
-                >
-                  {item.label}
+                  {t(`nav.${item.label.toLowerCase().replace(/\s+/g, '')}`)}
+                </Link>
+              ))}
+              <div className="group relative">
+                <button className="px-3 py-2 rounded-lg text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5 transition-colors">
+                  {t("nav.more")} ▾
+                </button>
+                <div className="absolute top-full right-0 mt-1 w-48 py-2 glass-card opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  {NAV_ITEMS.slice(6).map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block px-4 py-2 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5"
+                    >
+                      {t(`nav.${item.label.toLowerCase().replace(/\s+/g, '')}`)}
                 </Link>
               ))}
             </div>
           </div>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
           <Link href="/login">
-            <Button variant="ghost" size="sm">Sign In</Button>
+            <Button variant="ghost" size="sm">{t("nav.signIn")}</Button>
           </Link>
           <Link href="/register">
-            <Button size="sm">Get Started</Button>
+            <Button size="sm">{t("nav.getStarted")}</Button>
           </Link>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -91,10 +95,13 @@ export function Header() {
                     : "text-[#a0a0b0] hover:text-white hover:bg-white/5"
                 )}
               >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+                  {t(`nav.${item.label.toLowerCase().replace(/\s+/g, '')}`)}
+                </Link>
+              ))}
+            </nav>
+          <div className="mt-3 pt-3 border-t border-white/5 flex justify-center">
+            <LanguageSwitcher />
+          </div>
         </div>
       )}
     </header>

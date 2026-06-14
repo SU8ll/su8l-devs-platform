@@ -1,60 +1,60 @@
 "use client"
 import { motion } from "framer-motion"
-import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardHeader } from "@/components/glass-card"
+import { GlassCard, GlassCardContent, GlassCardTitle } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { useLocale } from "@/components/language-provider"
 
 export default function CommunityPage() {
+  const { t } = useLocale()
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-3"><span className="gradient-text">Community</span></h1>
-          <p className="text-[#a0a0b0]">Join our growing community of commanders</p>
+          <h1 className="text-4xl font-bold mb-3"><span className="gradient-text">{t("community.title")}</span></h1>
+          <p className="text-[#a0a0b0]">{t("community.desc")}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <GlassCard hover>
             <GlassCardContent className="text-center">
               <div className="text-4xl mb-3">💬</div>
-              <GlassCardTitle>Discord</GlassCardTitle>
-              <p className="text-sm text-[#a0a0b0] my-3">Join 5,000+ members on Discord</p>
-              <Button variant="primary" size="sm">Join Discord</Button>
+              <GlassCardTitle>{t("community.discord")}</GlassCardTitle>
+              <p className="text-sm text-[#a0a0b0] my-3">{t("community.discordDesc")}</p>
+              <a href="https://discord.gg/VYQjs6wWnN" target="_blank" rel="noopener noreferrer"><Button variant="primary" size="sm">{t("community.discord")}</Button></a>
             </GlassCardContent>
           </GlassCard>
           <GlassCard hover>
             <GlassCardContent className="text-center">
               <div className="text-4xl mb-3">📝</div>
-              <GlassCardTitle>Feedback</GlassCardTitle>
-              <p className="text-sm text-[#a0a0b0] my-3">Share your ideas and suggestions</p>
+              <GlassCardTitle>{t("community.feedback")}</GlassCardTitle>
+              <p className="text-sm text-[#a0a0b0] my-3">{t("community.feedbackDesc")}</p>
               <Link href="/community/feedback">
-                <Button variant="secondary" size="sm">Submit Feedback</Button>
+                <Button variant="secondary" size="sm">{t("community.feedback")}</Button>
               </Link>
             </GlassCardContent>
           </GlassCard>
           <GlassCard hover>
             <GlassCardContent className="text-center">
               <div className="text-4xl mb-3">🐛</div>
-              <GlassCardTitle>Bug Reports</GlassCardTitle>
-              <p className="text-sm text-[#a0a0b0] my-3">Help us improve the platform</p>
-              <Button variant="ghost" size="sm">Report Bug</Button>
+              <GlassCardTitle>{t("community.bugs")}</GlassCardTitle>
+              <p className="text-sm text-[#a0a0b0] my-3">{t("community.bugsDesc")}</p>
+              <Button variant="ghost" size="sm">{t("community.bugs")}</Button>
             </GlassCardContent>
           </GlassCard>
         </div>
 
         <GlassCard>
           <GlassCardContent className="text-center py-12">
-            <h2 className="text-2xl font-bold mb-3">Stay Connected</h2>
+            <h2 className="text-2xl font-bold mb-3">{t("community.stayConnected")}</h2>
             <p className="text-[#a0a0b0] mb-6 max-w-md mx-auto">
-              Follow us on social media for the latest updates, guides, and community events.
+              {t("community.stayConnectedDesc")}
             </p>
             <div className="flex justify-center gap-4">
-              {["Discord", "Twitter", "YouTube", "GitHub"].map((s) => (
-                <GlassCard key={s} hover className="px-6 py-3">
-                  <span className="font-semibold">{s}</span>
-                </GlassCard>
-              ))}
+              <a href="https://discord.gg/VYQjs6wWnN" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">{t("community.discord")}</span></GlassCard></a>
+              <a href="https://www.instagram.com/3erdo?igsh=d2RhdWZlZHpkZmFl&utm_source=qr" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">Instagram</span></GlassCard></a>
+              <a href="https://www.tiktok.com/@b8n?_r=1&_t=ZS-97BFIcjmVGf" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">TikTok</span></GlassCard></a>
+              <a href="https://wa.me/966561261377" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">WhatsApp</span></GlassCard></a>
             </div>
           </GlassCardContent>
         </GlassCard>

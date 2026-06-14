@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 model User {
@@ -35,12 +35,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String? 
+  access_token      String? 
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String? 
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -78,12 +78,12 @@ model UserProfile {
   id        String   @id @default(cuid())
   userId    String   @unique
   username  String?
-  bio       String?  @db.Text
+  bio       String?  
   discordId String?
   gameId    String?
   kingdom   String?
   alliance  String?
-  power     BigInt?
+  power     Int?
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -111,7 +111,7 @@ model Calculator {
   id          String   @id @default(cuid())
   slug        String   @unique
   title       String
-  description String   @db.Text
+  description String   
   icon        String
   category    String
   data        Json?
@@ -182,7 +182,7 @@ model Pet {
   slug      String   @unique
   type      String
   maxLevel  Int      @default(50)
-  skill     String?  @db.Text
+  skill     String?  
   costs     Json?
   stats     Json?
   image     String?
@@ -229,10 +229,10 @@ model BlogPost {
   id        String   @id @default(cuid())
   title     String
   slug      String   @unique
-  content   String   @db.Text
-  excerpt   String?  @db.Text
+  content   String   
+  excerpt   String?  
   category  String?
-  tags      String[]
+  tags      String
   image     String?
   published Boolean  @default(false)
   authorId  String
@@ -248,8 +248,8 @@ model Guide {
   id        String   @id @default(cuid())
   title     String
   slug      String   @unique
-  content   String   @db.Text
-  excerpt   String?  @db.Text
+  content   String   
+  excerpt   String?  
   category  String?
   difficulty String?
   image     String?
@@ -267,7 +267,7 @@ model Event {
   id          String   @id @default(cuid())
   name        String
   slug        String   @unique
-  description String?  @db.Text
+  description String?  
   type        String
   startDate   DateTime?
   endDate     DateTime?
@@ -284,7 +284,7 @@ model Feedback {
   userId    String
   type      String
   title     String
-  content   String   @db.Text
+  content   String   
   status    String   @default("pending")
   votes     Int      @default(0)
   createdAt DateTime @default(now())
@@ -299,7 +299,7 @@ model Notification {
   id        String   @id @default(cuid())
   userId    String
   title     String
-  content   String?  @db.Text
+  content   String?  
   type      String
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -313,7 +313,7 @@ model Changelog {
   id        String   @id @default(cuid())
   version   String
   title     String
-  content   String   @db.Text
+  content   String   
   type      String   @default("update")
   published Boolean  @default(true)
   createdAt DateTime @default(now())

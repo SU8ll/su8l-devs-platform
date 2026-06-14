@@ -1,0 +1,12 @@
+app = "su8l-system-web"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+
+[mounts]
+  source = "su8l_web_data"
+  destination = "/data"
+  processes = ["app"]
