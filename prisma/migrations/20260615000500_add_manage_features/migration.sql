@@ -9,7 +9,7 @@ CREATE TABLE "redeem_codes" (
     "maxUses" INTEGER NOT NULL DEFAULT 1,
     "usedCount" INTEGER NOT NULL DEFAULT 0,
     "expiresAt" TIMESTAMP(3),
-    "createdById" TEXT NOT NULL,
+    "createdById" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

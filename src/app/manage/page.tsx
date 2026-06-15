@@ -103,8 +103,12 @@ export default function ManagePage() {
         setGenMaxUses("1")
         setGenExpiry("")
         fetch("/api/manage/codes").then(r => r.json()).then(d => setCodes(d.codes || [])).catch(() => {})
+      } else {
+        setGenResult("error:" + (data.error || "Unknown error"))
       }
-    } catch {}
+    } catch (e: any) {
+      setGenResult("error:" + (e.message || "Unknown error"))
+    }
     setGenLoading(false)
   }
 
@@ -248,11 +252,21 @@ export default function ManagePage() {
                     </div>
                   </div>
                   {genResult && (
-                    <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                      <span className="text-emerald-400 text-sm flex-1 font-mono tracking-wider">{genResult}</span>
-                      <Button size="sm" variant="ghost" onClick={() => handleCopy(genResult)}>
-                        {copied ? t("manage.codeCopied") : "Copy"}
-                      </Button>
+                    <div className={`flex items-center gap-2 p-3 rounded-lg ${
+                      genResult.startsWith("error:")
+                        ? "bg-red-500/10 border border-red-500/20"
+                        : "bg-emerald-500/10 border border-emerald-500/20"
+                    }`}>
+                      <span className={`text-sm flex-1 font-mono tracking-wider ${
+                        genResult.startsWith("error:") ? "text-red-400" : "text-emerald-400"
+                      }`}>
+                        {genResult.startsWith("error:") ? genResult.slice(6) : genResult}
+                      </span>
+                      {!genResult.startsWith("error:") && (
+                        <Button size="sm" variant="ghost" onClick={() => handleCopy(genResult)}>
+                          {copied ? t("manage.codeCopied") : "Copy"}
+                        </Button>
+                      )}
                     </div>
                   )}
                   <Button type="submit" className="w-full" disabled={genLoading}>
