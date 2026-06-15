@@ -22,6 +22,15 @@ export async function POST(req: Request) {
 
     const trimmedCode = code.trim().toUpperCase()
 
+    // Check master owner code from env
+    const ownerCode = process.env.OWNER_ACCESS_CODE?.toUpperCase()
+    if (ownerCode && trimmedCode === ownerCode) {
+      if (session.user.role === "OWNER" || session.user.role === "ADMIN") {
+        return NextResponse.json({ success: true, message: t(locale, "redeem.ownerCode") })
+      }
+      return NextResponse.json({ error: t(locale, "redeem.ownerCodeInvalid") }, { status: 403 })
+    }
+
     const redeemCode = await prisma.redeemCode.findUnique({
       where: { code: trimmedCode },
     })
