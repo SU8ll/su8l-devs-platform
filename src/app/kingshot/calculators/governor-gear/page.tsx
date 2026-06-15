@@ -6,6 +6,7 @@ import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardHeader, GlassCard
 import { Button } from "@/components/ui/button"
 import { Select } from "@/components/ui/select"
 import { formatNumber } from "@/lib/utils"
+import { useLocale } from "@/components/language-provider"
 
 const GEAR_PIECES = ["Crown", "Pauldron", "Gauntlet", "Greaves", "Weapon", "Tome"]
 
@@ -41,15 +42,12 @@ const COST_DATA = Object.fromEntries(
   })
 )
 
-const currentLevelOptions = Array.from({ length: MAX_LEVEL }, (_, i) => ({
-  value: i,
-  label: `Level ${i}`,
-}))
-
-const targetLevelOptions = Array.from({ length: MAX_LEVEL }, (_, i) => ({
-  value: i + 1,
-  label: `Level ${i + 1}`,
-}))
+function getGearLevelOptions(t: (path: string, params?: Record<string, string>) => string, max: number, offset = 0) {
+  return Array.from({ length: max }, (_, i) => ({
+    value: i + offset,
+    label: t("calculator.levelOption", { level: String(i + offset) }),
+  }))
+}
 
 const ICONS: Record<string, string> = {
   Crown: "\u{1F451}",
@@ -67,6 +65,7 @@ interface PieceCosts {
 }
 
 export default function GovernorGearCalculator() {
+  const { t } = useLocale()
   const [currentLevels, setCurrentLevels] = useState<Record<string, number>>(
     Object.fromEntries(GEAR_PIECES.map((name) => [name, 0]))
   )
@@ -76,6 +75,9 @@ export default function GovernorGearCalculator() {
   const [results, setResults] = useState<Record<string, PieceCosts | null>>(
     Object.fromEntries(GEAR_PIECES.map((name) => [name, null]))
   )
+
+  const currentLevelOptions = getGearLevelOptions(t, MAX_LEVEL, 0)
+  const targetLevelOptions = getGearLevelOptions(t, MAX_LEVEL, 1)
 
   const handleCurrentChange = (piece: string, value: number) => {
     const v = Math.min(Math.max(0, value), MAX_LEVEL - 1)
@@ -139,23 +141,23 @@ export default function GovernorGearCalculator() {
       transition={{ duration: 0.5 }}
       className="space-y-6"
     >
-      <h1 className="text-3xl font-bold text-[#00c8ff]">Governor Gear Calculator</h1>
+      <h1 className="text-3xl font-bold text-[#00c8ff]">{t("calculator.governorGear")}</h1>
 
       <GlassCard>
         <GlassCardHeader>
-          <GlassCardTitle>Gear Configuration</GlassCardTitle>
+          <GlassCardTitle>{t("calculator.gearConfiguration")}</GlassCardTitle>
         </GlassCardHeader>
         <GlassCardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-white/50 text-xs uppercase tracking-wider">
-                  <th className="p-3 text-left font-medium">Piece</th>
-                  <th className="p-3 text-left font-medium">Current Level</th>
-                  <th className="p-3 text-left font-medium">Target Level</th>
-                  <th className="p-3 text-right font-medium">Satin</th>
-                  <th className="p-3 text-right font-medium">Threads</th>
-                  <th className="p-3 text-right font-medium">Visions</th>
+                  <th className="p-3 text-left font-medium">{t("calculator.piece")}</th>
+                  <th className="p-3 text-left font-medium">{t("calculator.currentLevel")}</th>
+                  <th className="p-3 text-left font-medium">{t("calculator.targetLevel")}</th>
+                  <th className="p-3 text-right font-medium">{t("calculator.satin")}</th>
+                  <th className="p-3 text-right font-medium">{t("calculator.threads")}</th>
+                  <th className="p-3 text-right font-medium">{t("calculator.artisansVisions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -201,7 +203,7 @@ export default function GovernorGearCalculator() {
         </GlassCardContent>
         <GlassCardFooter>
           <Button onClick={handleCalculateAll} className="w-full">
-            Calculate All
+            {t("calculator.calculateAll")}
           </Button>
         </GlassCardFooter>
       </GlassCard>
@@ -214,20 +216,20 @@ export default function GovernorGearCalculator() {
         >
           <GlassCard glow>
             <GlassCardHeader>
-              <GlassCardTitle>Combined Summary</GlassCardTitle>
+              <GlassCardTitle>{t("calculator.combinedSummary")}</GlassCardTitle>
             </GlassCardHeader>
             <GlassCardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div className="rounded-xl border border-[#00c8ff]/20 bg-[#00c8ff]/5 p-4 text-center">
-                  <p className="text-xs text-white/50 uppercase tracking-wider mb-1">Total Satin</p>
+                  <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{t("calculator.total")} {t("calculator.satin")}</p>
                   <p className="text-2xl font-bold text-[#00c8ff]">{formatNumber(grandTotals.satin)}</p>
                 </div>
                 <div className="rounded-xl border border-[#ff6b35]/20 bg-[#ff6b35]/5 p-4 text-center">
-                  <p className="text-xs text-white/50 uppercase tracking-wider mb-1">Total Threads</p>
+                  <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{t("calculator.total")} {t("calculator.threads")}</p>
                   <p className="text-2xl font-bold text-[#ff6b35]">{formatNumber(grandTotals.threads)}</p>
                 </div>
                 <div className="rounded-xl border border-[#7c3aed]/20 bg-[#7c3aed]/5 p-4 text-center">
-                  <p className="text-xs text-white/50 uppercase tracking-wider mb-1">Total Artisan&apos;s Visions</p>
+                  <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{t("calculator.total")} {t("calculator.artisansVisions")}</p>
                   <p className="text-2xl font-bold text-[#7c3aed]">{formatNumber(grandTotals.visions)}</p>
                 </div>
               </div>

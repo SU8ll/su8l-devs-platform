@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Select } from "@/components/ui/select"
 import { formatNumber, formatTime, trainingBaseTimes } from "@/lib/utils"
 import { TROOP_TYPES } from "@/lib/constants"
+import { useLocale } from "@/components/language-provider"
 
 type Mode = "training" | "promoting"
 
@@ -30,6 +31,7 @@ const childVariants = {
 }
 
 export default function TrainingCalculatorPage() {
+  const { t } = useLocale()
   const [mode, setMode] = useState<Mode>("training")
   const [troopType, setTroopType] = useState("infantry")
   const [fromTier, setFromTier] = useState(1)
@@ -85,7 +87,7 @@ export default function TrainingCalculatorPage() {
           style={{ color: "#00c8ff" }}
           variants={childVariants}
         >
-          Troop Training Calculator
+          {t("calculator.training")}
         </motion.h1>
 
         {/* Mode Toggle */}
@@ -111,14 +113,14 @@ export default function TrainingCalculatorPage() {
                 backgroundColor: mode === m ? "#ff6b35" : "rgba(255,255,255,0.06)",
               }}
             >
-              {m}
+              {t(m === "training" ? "calculator.trainingMode" : "calculator.promotingMode")}
             </button>
           ))}
         </motion.div>
 
         {/* Troop Type */}
         <motion.div variants={childVariants}>
-          <label className="mb-1 block text-sm text-white/60">Troop Type</label>
+          <label className="mb-1 block text-sm text-white/60">{t("calculator.troopType")}</label>
           <Select value={troopType} onChange={(e) => setTroopType(e.target.value)}>
             {TROOP_TYPES.map((t) => (
               <option key={t} value={t}>
@@ -131,7 +133,7 @@ export default function TrainingCalculatorPage() {
         {/* Tier Row */}
         <motion.div className="grid grid-cols-2 gap-4" variants={childVariants}>
           <div>
-            <label className="mb-1 block text-sm text-white/60">From Tier</label>
+            <label className="mb-1 block text-sm text-white/60">{t("calculator.fromTier")}</label>
             <Select value={fromTier} onChange={(e) => setFromTier(Number(e.target.value))}>
               {TIER_OPTIONS.map((t) => (
                 <option key={t} value={t}>
@@ -141,7 +143,7 @@ export default function TrainingCalculatorPage() {
             </Select>
           </div>
           <div>
-            <label className="mb-1 block text-sm text-white/60">To Tier</label>
+            <label className="mb-1 block text-sm text-white/60">{t("calculator.toTier")}</label>
             <Select
               value={toTier}
               onChange={(e) => setToTier(Number(e.target.value))}
@@ -159,7 +161,7 @@ export default function TrainingCalculatorPage() {
 
         {/* Quantity */}
         <motion.div variants={childVariants}>
-          <label className="mb-1 block text-sm text-white/60">Quantity</label>
+          <label className="mb-1 block text-sm text-white/60">{t("calculator.quantity")}</label>
           <input
             type="number"
             min={1}
@@ -172,7 +174,7 @@ export default function TrainingCalculatorPage() {
         {/* Speed Bonus Slider */}
         <motion.div variants={childVariants}>
           <label className="mb-1 block text-sm text-white/60">
-            Speed Bonus: <span style={{ color: "#00c8ff" }}>{speedBonus}%</span>
+            {t("calculator.speedBonus")}: <span style={{ color: "#00c8ff" }}>{speedBonus}%</span>
           </label>
           <input
             type="range"
@@ -190,7 +192,7 @@ export default function TrainingCalculatorPage() {
 
         {/* Kingdom Skill */}
         <motion.div variants={childVariants}>
-          <label className="mb-1 block text-sm text-white/60">Kingdom Skill</label>
+          <label className="mb-1 block text-sm text-white/60">{t("calculator.kingdomSkill")}</label>
           <Select
             value={kingdomSkill}
             onChange={(e) => setKingdomSkill(Number(e.target.value))}
@@ -205,7 +207,7 @@ export default function TrainingCalculatorPage() {
 
         {/* KvK Bonus */}
         <motion.div variants={childVariants}>
-          <label className="mb-1 block text-sm text-white/60">KvK Bonus</label>
+          <label className="mb-1 block text-sm text-white/60">{t("calculator.kvkBonus")}</label>
           <Select value={kvk} onChange={(e) => setKvk(Number(e.target.value))}>
             {KVK_OPTIONS.map((v) => (
               <option key={v} value={v}>
@@ -217,7 +219,7 @@ export default function TrainingCalculatorPage() {
 
         {/* Ministry Bonus */}
         <motion.div variants={childVariants}>
-          <label className="mb-1 block text-sm text-white/60">Ministry Bonus</label>
+          <label className="mb-1 block text-sm text-white/60">{t("calculator.ministryBonus")}</label>
           <Select
             value={ministry}
             onChange={(e) => setMinistry(Number(e.target.value))}
@@ -233,14 +235,14 @@ export default function TrainingCalculatorPage() {
         {/* Available Speedups */}
         <motion.div variants={childVariants}>
           <label className="mb-1 block text-sm text-white/60">
-            Available Speedups <span className="text-white/30">(hours, optional)</span>
+            {t("calculator.availableSpeedups")} <span className="text-white/30">{t("calculator.hoursOptional")}</span>
           </label>
           <input
             type="number"
             min={0}
             value={speedups}
             onChange={(e) => setSpeedups(e.target.value)}
-            placeholder="e.g. 24"
+            placeholder={t("calculator.eg24")}
             className="input-glass w-full"
           />
         </motion.div>
@@ -252,7 +254,7 @@ export default function TrainingCalculatorPage() {
             className="w-full py-3 text-base font-bold uppercase tracking-wider"
             style={{ backgroundColor: "#ff6b35", color: "#fff" }}
           >
-            Calculate
+            {t("calculator.calculate")}
           </Button>
         </motion.div>
 
@@ -265,7 +267,7 @@ export default function TrainingCalculatorPage() {
           >
             <GlassCard>
               <GlassCardContent className="space-y-3">
-                <GlassCardTitle>Results</GlassCardTitle>
+                <GlassCardTitle>{t("calculator.results")}</GlassCardTitle>
 
                 <div className="flex flex-wrap gap-3">
                   <span
@@ -275,7 +277,7 @@ export default function TrainingCalculatorPage() {
                       color: "#34d399",
                     }}
                   >
-                    Total: {result.totalFormatted}
+                    {t("calculator.total")}: {result.totalFormatted}
                   </span>
 
                   <span
@@ -285,7 +287,7 @@ export default function TrainingCalculatorPage() {
                       color: "#00c8ff",
                     }}
                   >
-                    Per Unit: {result.perUnitFormatted}
+                    {t("calculator.perUnit")} {result.perUnitFormatted}
                   </span>
 
                   {result.speedupsNeeded !== null && (
@@ -296,7 +298,7 @@ export default function TrainingCalculatorPage() {
                         color: "#ff6b35",
                       }}
                     >
-                      Additional Speedups:{" "}
+                      {t("calculator.additionalSpeedups")}{" "}
                       {formatTime(result.speedupsNeeded)}
                     </span>
                   )}

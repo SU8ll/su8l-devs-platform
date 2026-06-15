@@ -4,10 +4,12 @@ import Link from "next/link"
 import { GlassCard, GlassCardContent, GlassCardTitle } from "@/components/glass-card"
 import { Badge } from "@/components/ui/badge"
 import { CALCULATOR_LIST } from "@/lib/constants"
+import { useLocale } from "@/components/language-provider"
 
 const categories = [...new Set(CALCULATOR_LIST.map((c) => c.category))]
 
 export default function CalculatorsPage() {
+  const { t } = useLocale()
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
       <motion.div
@@ -16,10 +18,10 @@ export default function CalculatorsPage() {
         className="text-center mb-16"
       >
         <h1 className="text-5xl font-bold mb-4">
-          <span className="gradient-text">Calculators</span>
+          <span className="gradient-text">{t("kingshot.calculatorsTitle")}</span>
         </h1>
         <p className="text-[#a0a0b0] text-lg max-w-2xl mx-auto">
-          Advanced calculators to optimize your strategy game progression. Plan your upgrades, training, and resource management.
+          {t("kingshot.calculatorsDesc")}
         </p>
       </motion.div>
 
@@ -33,7 +35,7 @@ export default function CalculatorsPage() {
         >
           <h2 className="text-2xl font-bold mb-6 capitalize flex items-center gap-3">
             <span className="w-1 h-6 rounded-full bg-gradient-to-b from-[#00c8ff] to-[#7c3aed]" />
-            {category} Tools
+            {t("kingshot.calculatorsCategoryTools", { category })}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {CALCULATOR_LIST.filter((c) => c.category === category).map((calc, i) => (
@@ -51,7 +53,7 @@ export default function CalculatorsPage() {
                         <div>
                           <GlassCardTitle>{calc.title}</GlassCardTitle>
                           <p className="text-sm text-[#a0a0b0] mt-1">
-                            Calculate {calc.title.toLowerCase()} costs and requirements
+                            {t("kingshot.calculatorsCalcDesc", { tool: calc.title })}
                           </p>
                         </div>
                       </div>

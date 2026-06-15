@@ -6,8 +6,10 @@ import { Suspense, useEffect, useState } from "react"
 import Link from "next/link"
 import { GlassCard, GlassCardContent } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
+import { useLocale } from "@/components/language-provider"
 
 function VerifyEmailContent() {
+  const { t } = useLocale()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
   const [message, setMessage] = useState("")
@@ -18,7 +20,7 @@ function VerifyEmailContent() {
 
     if (!token || !email) {
       setStatus("error")
-      setMessage("Missing verification parameters.")
+      setMessage(t("verify.missingParams"))
       return
     }
 
@@ -29,11 +31,11 @@ function VerifyEmailContent() {
           return
         }
         setStatus("error")
-        setMessage("Verification failed. Please try again.")
+        setMessage(t("verify.failed"))
       })
       .catch(() => {
         setStatus("error")
-        setMessage("Something went wrong.")
+        setMessage(t("verify.error"))
       })
   }, [searchParams])
 
@@ -51,8 +53,8 @@ function VerifyEmailContent() {
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#00c8ff]/10 flex items-center justify-center">
                   <div className="w-8 h-8 border-2 border-[#00c8ff] border-t-transparent rounded-full animate-spin" />
                 </div>
-                <h1 className="text-2xl font-bold mb-3">Verifying...</h1>
-                <p className="text-[#a0a0b0] text-sm">Please wait while we verify your email.</p>
+                <h1 className="text-2xl font-bold mb-3">{t("verify.verifying")}</h1>
+                <p className="text-[#a0a0b0] text-sm">{t("verify.wait")}</p>
               </>
             )}
             {status === "error" && (
@@ -60,10 +62,10 @@ function VerifyEmailContent() {
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-red-500/10 flex items-center justify-center text-3xl">
                   ⚠️
                 </div>
-                <h1 className="text-2xl font-bold mb-3">Verification Failed</h1>
+                <h1 className="text-2xl font-bold mb-3">{t("verify.failedTitle")}</h1>
                 <p className="text-[#a0a0b0] text-sm mb-8">{message}</p>
                 <Link href="/login">
-                  <Button variant="primary">Go to Sign In</Button>
+                  <Button variant="primary">{t("verify.goToSignIn")}</Button>
                 </Link>
               </>
             )}

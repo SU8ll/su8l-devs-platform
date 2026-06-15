@@ -6,21 +6,22 @@ import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardHeader } from "@/
 import { Button } from "@/components/ui/button"
 import { Select } from "@/components/ui/select"
 import { formatNumber } from "@/lib/utils"
+import { useLocale } from "@/components/language-provider"
 
 const CUMULATIVE = [0, 10, 40, 115, 300, 600]
 
-const starOptions = (from: number, to: number) =>
-  Array.from({ length: to - from + 1 }, (_, i) => ({
-    value: from + i,
-    label: "\u2605".repeat(from + i) + " Star",
-  }))
-
-const currentOptions = starOptions(1, 5)
-
 export default function HeroProgressionPage() {
+  const { t } = useLocale()
   const [current, setCurrent] = useState(1)
   const [target, setTarget] = useState(2)
 
+  const starOptions = (from: number, to: number) =>
+    Array.from({ length: to - from + 1 }, (_, i) => ({
+      value: from + i,
+      label: t("calculator.hpStarLabel", { stars: "\u2605".repeat(from + i) }),
+    }))
+
+  const currentOptions = starOptions(1, 5)
   const targetOptions = starOptions(current + 1, 6)
   const safeTarget = target <= current ? current + 1 : target
   const shardsNeeded = CUMULATIVE[safeTarget - 1] - CUMULATIVE[current - 1]
@@ -34,17 +35,17 @@ export default function HeroProgressionPage() {
         className="mx-auto max-w-2xl space-y-6"
       >
         <h1 className="gradient-text text-center text-4xl font-bold">
-          Hero Progression Calculator
+          {t("calculator.heroProgression")}
         </h1>
 
         <GlassCard>
           <GlassCardHeader>
-            <GlassCardTitle>Select Star Levels</GlassCardTitle>
+            <GlassCardTitle>{t("calculator.selectStarLevels")}</GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="input-glass space-y-2">
-                <label className="text-sm text-gray-400">Current Star Level</label>
+                <label className="text-sm text-gray-400">{t("calculator.currentStarLevel")}</label>
                 <Select
                   options={currentOptions}
                   value={current}
@@ -56,7 +57,7 @@ export default function HeroProgressionPage() {
                 />
               </div>
               <div className="input-glass space-y-2">
-                <label className="text-sm text-gray-400">Target Star Level</label>
+                <label className="text-sm text-gray-400">{t("calculator.targetStarLevel")}</label>
                 <Select
                   options={targetOptions}
                   value={safeTarget}
@@ -75,11 +76,11 @@ export default function HeroProgressionPage() {
         >
           <GlassCard className="gradient-border">
             <GlassCardHeader>
-              <GlassCardTitle>Shards Required</GlassCardTitle>
+              <GlassCardTitle>{t("calculator.shardsRequired")}</GlassCardTitle>
             </GlassCardHeader>
             <GlassCardContent className="text-center">
               <p className="mb-2 text-sm text-gray-400">
-                From \u2605{current} to \u2605{safeTarget}
+                {t("calculator.hpFromTo", { current: "\u2605" + current, target: "\u2605" + safeTarget })}
               </p>
               <p className="text-6xl font-bold text-[#00c8ff]">
                 {formatNumber(shardsNeeded)}
@@ -90,14 +91,14 @@ export default function HeroProgressionPage() {
 
         <GlassCard>
           <GlassCardHeader>
-            <GlassCardTitle>Star Level Reference</GlassCardTitle>
+            <GlassCardTitle>{t("calculator.reference")}</GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent>
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-white/10 text-sm text-gray-400">
-                  <th className="pb-2">Star Level</th>
-                  <th className="pb-2">Cumulative Shards</th>
+                  <th className="pb-2">{t("calculator.starLevel")}</th>
+                  <th className="pb-2">{t("calculator.cumulativeShards")}</th>
                 </tr>
               </thead>
               <tbody>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Select } from "@/components/ui/select"
 import { formatNumber } from "@/lib/utils"
 import { calculateMasterCost, calculateWarAcademyCost, calculatePetCost } from "@/lib/utils"
+import { useLocale } from "@/components/language-provider"
 
 type ResearchType = "master" | "war-academy" | "pet"
 
@@ -26,11 +27,15 @@ const MAX_LEVELS: Record<ResearchType, number> = {
   pet: 50,
 }
 
-const TYPE_OPTIONS = [
-  { value: "master", label: "Master" },
-  { value: "war-academy", label: "War Academy" },
-  { value: "pet", label: "Pet" },
-]
+let TYPE_OPTIONS: { value: string; label: string }[] = []
+
+function getTypeOptions(t: (path: string) => string) {
+  return [
+    { value: "master", label: t("calculator.master") },
+    { value: "war-academy", label: t("calculator.warAcademy") },
+    { value: "pet", label: t("calculator.pet") },
+  ]
+}
 
 function formatTime(seconds: number): string {
   const d = Math.floor(seconds / 86400)
@@ -46,11 +51,13 @@ function formatTime(seconds: number): string {
 }
 
 export default function ResearchCalculatorPage() {
+  const { t } = useLocale()
   const [type, setType] = useState<ResearchType>("master")
   const [currentLevel, setCurrentLevel] = useState(1)
   const [targetLevel, setTargetLevel] = useState(2)
   const [results, setResults] = useState<LevelCost[] | null>(null)
 
+  const typeOptions = getTypeOptions(t)
   const maxLevel = MAX_LEVELS[type]
 
   const currentOptions = Array.from({ length: maxLevel - 1 }, (_, i) => ({
@@ -122,20 +129,20 @@ export default function ResearchCalculatorPage() {
         >
           <GlassCard>
             <GlassCardHeader>
-              <GlassCardTitle>Research Calculator</GlassCardTitle>
+              <GlassCardTitle>{t("calculator.research")}</GlassCardTitle>
             </GlassCardHeader>
             <GlassCardContent className="space-y-4">
               <div>
-                <label className="block text-sm text-white/60 mb-1">Research Type</label>
+                <label className="block text-sm text-white/60 mb-1">{t("calculator.researchType")}</label>
                 <Select
-                  options={TYPE_OPTIONS}
+                  options={typeOptions}
                   value={type}
                   onChange={(e) => handleTypeChange(e.target.value)}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-white/60 mb-1">Current Level</label>
+                  <label className="block text-sm text-white/60 mb-1">{t("calculator.currentLevel")}</label>
                   <Select
                     options={currentOptions}
                     value={currentLevel}
@@ -148,7 +155,7 @@ export default function ResearchCalculatorPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-white/60 mb-1">Target Level</label>
+                  <label className="block text-sm text-white/60 mb-1">{t("calculator.targetLevel")}</label>
                   <Select
                     options={targetOptions}
                     value={targetLevel}
@@ -160,7 +167,7 @@ export default function ResearchCalculatorPage() {
                 </div>
               </div>
               <Button onClick={calculate} className="w-full">
-                Calculate
+                {t("calculator.calculate")}
               </Button>
             </GlassCardContent>
           </GlassCard>
@@ -174,30 +181,30 @@ export default function ResearchCalculatorPage() {
           >
             <GlassCard>
               <GlassCardHeader>
-                <GlassCardTitle>Level Breakdown</GlassCardTitle>
+                <GlassCardTitle>{t("calculator.levelBreakdown")}</GlassCardTitle>
               </GlassCardHeader>
               <GlassCardContent>
                 <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-white/60 border-b border-white/10">
-                        <th className="text-left py-2 px-3 sticky top-0 bg-[#0a0a1a]">Level</th>
+                        <th className="text-left py-2 px-3 sticky top-0 bg-[#0a0a1a]">{t("calculator.level")}</th>
                         {type === "master" && (
                           <>
-                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">Tomes</th>
-                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">Gold</th>
+                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">{t("calculator.tomes")}</th>
+                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">{t("calculator.gold")}</th>
                           </>
                         )}
                         {type === "war-academy" && (
                           <>
-                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">Books</th>
-                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">Gold</th>
+                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">{t("calculator.academyBooks")}</th>
+                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">{t("calculator.gold")}</th>
                           </>
                         )}
                         {type === "pet" && (
                           <>
-                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">Food</th>
-                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">Time</th>
+                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">{t("calculator.food")}</th>
+                            <th className="text-right py-2 px-3 sticky top-0 bg-[#0a0a1a]">{t("calculator.time")}</th>
                           </>
                         )}
                       </tr>
@@ -237,7 +244,7 @@ export default function ResearchCalculatorPage() {
                     {totals && (
                       <tfoot>
                         <tr className="border-t border-[#00c8ff]/30 font-semibold">
-                          <td className="py-2 px-3 text-[#00c8ff]">Total</td>
+                          <td className="py-2 px-3 text-[#00c8ff]">{t("calculator.total")}</td>
                           {type === "master" && (
                             <>
                               <td className="text-right py-2 px-3">{formatNumber(totals.tomes!)}</td>
@@ -266,7 +273,7 @@ export default function ResearchCalculatorPage() {
 
             <GlassCard className="mt-4">
               <GlassCardHeader>
-                <GlassCardTitle>Summary</GlassCardTitle>
+                <GlassCardTitle>{t("calculator.summary")}</GlassCardTitle>
               </GlassCardHeader>
               <GlassCardContent>
                 <div className="grid grid-cols-2 gap-4">
@@ -285,7 +292,7 @@ export default function ResearchCalculatorPage() {
                     })}
                   {hasTime && totals?.time && (
                     <div className="bg-white/[0.03] rounded-xl p-4">
-                      <div className="text-sm text-white/60">Time</div>
+                      <div className="text-sm text-white/60">{t("calculator.time")}</div>
                       <div className="text-xl font-bold text-[#00c8ff]">
                         {formatTime(totals.time)}
                       </div>

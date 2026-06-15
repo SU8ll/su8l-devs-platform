@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { formatNumber, formatTime } from "@/lib/utils";
 import { BUILDING_TYPES } from "@/lib/constants";
+import { useLocale } from "@/components/language-provider";
 
 const MAX_LEVEL = 35;
 
@@ -138,6 +139,7 @@ interface LevelCost {
 }
 
 export default function BuildingUpgradeCalculator() {
+  const { t } = useLocale()
   const [selectedBuilding, setSelectedBuilding] = useState(buildingNames[0]);
   const [currentLevel, setCurrentLevel] = useState(1);
   const [targetLevel, setTargetLevel] = useState(MAX_LEVEL);
@@ -215,30 +217,33 @@ export default function BuildingUpgradeCalculator() {
         animate={{ opacity: 1, y: 0 }}
         className="mx-auto max-w-6xl space-y-6"
       >
-        <h1 className="text-3xl font-bold text-[#00c8ff]">Building Upgrade Calculator</h1>
+        <h1 className="text-3xl font-bold text-[#00c8ff]">{t("calculator.buildingUpgrade")}</h1>
 
         <GlassCard>
           <GlassCardHeader>
-            <GlassCardTitle>Configuration</GlassCardTitle>
+            <GlassCardTitle>{t("calculator.configuration")}</GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent className="space-y-5">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Building</label>
+                <label className="text-sm text-white/60">{t("calculator.building")}</label>
                 <Select value={selectedBuilding} onChange={(e: any) => handleBuildingChange(e.target?.value ?? e)}>
-                  {buildingNames.map((name) => (
-                    <option key={name} value={name}>
-                      {name}
-                    </option>
-                  ))}
+                  {buildingNames.map((name) => {
+                    const key = "calculator.building" + name.replace(/ /g, "")
+                    return (
+                      <option key={name} value={name}>
+                        {t(key)}
+                      </option>
+                    )
+                  })}
                 </Select>
                 <p className="text-xs text-white/40">
-                  Type: {building.type} &middot; Max Level: {MAX_LEVEL}
+                  {t("calculator.description")}: {t(building.type === "Economy" ? "calculator.researchEconomy" : "calculator.researchMilitary")} &middot; {t("calculator.maxLevel", { level: String(MAX_LEVEL) })}
                 </p>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Current Level</label>
+                <label className="text-sm text-white/60">{t("calculator.currentLevel")}</label>
                 <input
                   type="number"
                   className="input-glass w-full"
@@ -250,7 +255,7 @@ export default function BuildingUpgradeCalculator() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Target Level</label>
+                <label className="text-sm text-white/60">{t("calculator.targetLevel")}</label>
                 <input
                   type="number"
                   className="input-glass w-full"
@@ -264,7 +269,7 @@ export default function BuildingUpgradeCalculator() {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Construction Speed (%)</label>
+                <label className="text-sm text-white/60">{t("calculator.constructionSpeed")} (%)</label>
                 <input
                   type="number"
                   className="input-glass w-full"
@@ -275,7 +280,7 @@ export default function BuildingUpgradeCalculator() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Cost Down (%)</label>
+                <label className="text-sm text-white/60">{t("calculator.costDown")} (%)</label>
                 <input
                   type="number"
                   className="input-glass w-full"
@@ -295,7 +300,7 @@ export default function BuildingUpgradeCalculator() {
                   checked={wolfPet}
                   onChange={(e) => { setWolfPet(e.target.checked); setResults(null); }}
                 />
-                Wolf Pet (5%)
+                {t("calculator.wolfPet")}
               </label>
               <label className="flex items-center gap-2 text-sm text-white/70 cursor-pointer">
                 <input
@@ -304,7 +309,7 @@ export default function BuildingUpgradeCalculator() {
                   checked={chiefMinister}
                   onChange={(e) => { setChiefMinister(e.target.checked); setResults(null); }}
                 />
-                Chief Minister (10%)
+                {t("calculator.chiefMinister")}
               </label>
               <label className="flex items-center gap-2 text-sm text-white/70 cursor-pointer">
                 <input
@@ -313,7 +318,7 @@ export default function BuildingUpgradeCalculator() {
                   checked={groundWorks}
                   onChange={(e) => { setGroundWorks(e.target.checked); setResults(null); }}
                 />
-                Ground Works (15%)
+                {t("calculator.groundWorks")}
               </label>
               <label className="flex items-center gap-2 text-sm text-white/70 cursor-pointer">
                 <input
@@ -322,12 +327,12 @@ export default function BuildingUpgradeCalculator() {
                   checked={doubleTime}
                   onChange={(e) => { setDoubleTime(e.target.checked); setResults(null); }}
                 />
-                Double Time (&times;0.5)
+                {t("calculator.doubleTime")}
               </label>
             </div>
 
             <Button onClick={handleCalculate} className="w-full md:w-auto">
-              Calculate
+              {t("calculator.calculate")}
             </Button>
           </GlassCardContent>
         </GlassCard>
@@ -339,19 +344,19 @@ export default function BuildingUpgradeCalculator() {
           >
             <GlassCard>
               <GlassCardHeader>
-                <GlassCardTitle>Upgrade Costs: Level {currentLevel} &rarr; {targetLevel}</GlassCardTitle>
+                <GlassCardTitle>{t("calculator.upgradeCosts")}: {t("calculator.level")} {currentLevel} &rarr; {targetLevel}</GlassCardTitle>
               </GlassCardHeader>
               <GlassCardContent className="overflow-x-auto">
                 <table className="w-full text-sm border-collapse">
                   <thead>
                     <tr className="border-b border-white/10 text-white/50 text-xs uppercase tracking-wider">
-                      <th className="p-3 text-left font-medium">Level</th>
-                      <th className="p-3 text-right font-medium">Wood</th>
-                      <th className="p-3 text-right font-medium">Stone</th>
-                      <th className="p-3 text-right font-medium">Iron</th>
-                      <th className="p-3 text-right font-medium">Bread</th>
-                      <th className="p-3 text-right font-medium">Time</th>
-                      <th className="p-3 text-right font-medium">Truegold</th>
+                      <th className="p-3 text-left font-medium">{t("calculator.level")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.resourceWood")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.resourceStone")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.resourceIron")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.resourceBread")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.time")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.resourceTruegold")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -370,7 +375,7 @@ export default function BuildingUpgradeCalculator() {
                       </tr>
                     ))}
                     <tr className="border-t-2 border-[#00c8ff]/30 bg-[#00c8ff]/5 font-semibold">
-                      <td className="p-3 text-[#00c8ff]">Total</td>
+                      <td className="p-3 text-[#00c8ff]">{t("calculator.total")}</td>
                       <td className="p-3 text-right text-[#ff6b35]">{formatNumber(totals.wood)}</td>
                       <td className="p-3 text-right text-white/90">{formatNumber(totals.stone)}</td>
                       <td className="p-3 text-right text-white/90">{formatNumber(totals.iron)}</td>

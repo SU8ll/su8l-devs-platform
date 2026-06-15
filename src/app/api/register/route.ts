@@ -1,20 +1,24 @@
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
+import { t } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n"
 
 export async function POST(req: Request) {
+  let locale: Locale = "en"
   try {
     const { name, email, password } = await req.json()
+    locale = (req.headers.get("x-locale") as Locale) || "en"
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: "Email and password are required" },
+        { error: t(locale, "api.emailRequired") },
         { status: 400 }
       )
     }
 
     if (password.length < 8) {
       return NextResponse.json(
-        { error: "Password must be at least 8 characters" },
+        { error: t(locale, "api.passwordMin") },
         { status: 400 }
       )
     }
@@ -24,7 +28,7 @@ export async function POST(req: Request) {
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) {
       return NextResponse.json(
-        { error: "Email already registered" },
+        { error: t(locale, "api.emailRegistered") },
         { status: 409 }
       )
     }
@@ -41,13 +45,13 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json(
-      { message: "Account created successfully" },
+      { message: t(locale, "api.accountCreated") },
       { status: 201 }
     )
   } catch (error) {
     console.error("Registration error:", error)
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: t(locale, "api.serverError") },
       { status: 500 }
     )
   }

@@ -216,7 +216,7 @@ export default function SU8LSystemPage() {
                     </div>
                   )}
                   <h3 className="text-xl font-bold mb-2">{ts(tier)}</h3>
-                  <div className="text-4xl font-bold mb-4">{ts(`${tier}Price`)} <span className="text-base font-normal text-slate-400">/mo</span></div>
+                  <div className="text-4xl font-bold mb-4">{ts(`${tier}Price`)} <span className="text-base font-normal text-slate-400">{ts("perMonth")}</span></div>
                   <p className="text-sm text-slate-400 mb-6">{ts(`${tier}Desc`)}</p>
                   <ul className="space-y-3 mb-8">
                     {[1, 2, 3, 4, 5].map(j => (
@@ -303,11 +303,11 @@ export default function SU8LSystemPage() {
       {/* Footer Extra */}
       <footer className="relative py-8 px-4 border-t border-white/5">
         <div className="max-w-6xl mx-auto text-center text-sm text-slate-500">
-          <p className="mb-2">© 2026 <Link href="/" className="text-violet-400 hover:text-violet-300">SU8L DEvs</Link>. All rights reserved.</p>
+          <p className="mb-2">© 2026 <Link href="/" className="text-violet-400 hover:text-violet-300">SU8L DEvs</Link>. {t("footer.rights")}</p>
           <div className="flex justify-center gap-4">
-            <Link href="/legal/terms" className="hover:text-slate-300 transition-colors">Terms</Link>
-            <Link href="/legal/privacy" className="hover:text-slate-300 transition-colors">Privacy</Link>
-            <Link href={DISCORD_INVITE} target="_blank" className="hover:text-slate-300 transition-colors">Contact</Link>
+            <Link href="/legal/terms" className="hover:text-slate-300 transition-colors">{t("nav.terms")}</Link>
+            <Link href="/legal/privacy" className="hover:text-slate-300 transition-colors">{t("nav.privacy")}</Link>
+            <Link href={DISCORD_INVITE} target="_blank" className="hover:text-slate-300 transition-colors">{ts("contact")}</Link>
           </div>
         </div>
       </footer>

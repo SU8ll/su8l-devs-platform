@@ -21,10 +21,12 @@ model User {
   sessions     Session[]
   profiles     UserProfile[]
   savedBuilds  SavedBuild[]
-  feedbacks    Feedback[]
-  blogPosts    BlogPost[]
-  guides       Guide[]
-  notifications Notification[]
+  feedbacks         Feedback[]
+  blogPosts         BlogPost[]
+  guides            Guide[]
+  notifications     Notification[]
+  redeemCodesCreated RedeemCode[]
+  userRedeems        UserRedeem[]
 
   @@map("users")
 }
@@ -72,6 +74,36 @@ enum Role {
   USER
   MODERATOR
   ADMIN
+  OWNER
+}
+
+model RedeemCode {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  description String?
+  maxUses     Int      @default(1)
+  usedCount   Int      @default(0)
+  createdById String?
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+
+  createdBy User?  @relation(fields: [createdById], references: [id])
+  redeems   UserRedeem[]
+
+  @@map("redeem_codes")
+}
+
+model UserRedeem {
+  id           String   @id @default(cuid())
+  userId       String
+  redeemCodeId String
+  redeemedAt   DateTime @default(now())
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  redeemCode RedeemCode @relation(fields: [redeemCodeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, redeemCodeId])
+  @@map("user_redeems")
 }
 
 model UserProfile {

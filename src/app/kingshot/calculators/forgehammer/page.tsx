@@ -6,6 +6,7 @@ import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardHeader } from "@/
 import { Button } from "@/components/ui/button"
 import { Select } from "@/components/ui/select"
 import { formatNumber } from "@/lib/utils"
+import { useLocale } from "@/components/language-provider"
 
 const FH_COSTS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
 const MG_COSTS = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3, 3, 4, 5, 6, 8, 10]
@@ -14,6 +15,7 @@ const MAX_LEVEL = 20
 type Tab = "requirements" | "possible"
 
 export default function ForgehammerCalculator() {
+  const { t } = useLocale()
   const [tab, setTab] = useState<Tab>("requirements")
 
   const [fromLevel, setFromLevel] = useState(0)
@@ -75,7 +77,7 @@ export default function ForgehammerCalculator() {
               : "bg-white/5 text-gray-400 hover:bg-white/10"
           }`}
         >
-          Calculate Requirements
+          {t("calculator.calcRequirements")}
         </button>
         <button
           onClick={() => setTab("possible")}
@@ -85,7 +87,7 @@ export default function ForgehammerCalculator() {
               : "bg-white/5 text-gray-400 hover:bg-white/10"
           }`}
         >
-          Calculate Possible Level
+          {t("calculator.calcPossibleLevel")}
         </button>
       </div>
 
@@ -97,12 +99,12 @@ export default function ForgehammerCalculator() {
         >
           <GlassCard>
             <GlassCardHeader>
-              <GlassCardTitle>Calculate Requirements</GlassCardTitle>
+              <GlassCardTitle>{t("calculator.calcRequirements")}</GlassCardTitle>
             </GlassCardHeader>
             <GlassCardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm text-gray-400">From Level</label>
+                  <label className="text-sm text-gray-400">{t("calculator.fromLevel")}</label>
                   <Select value={fromLevel} onChange={(e) => setFromLevel(Number(e.target.value))}>
                     {Array.from({ length: 20 }, (_, i) => (
                       <option key={i} value={i}>{i}</option>
@@ -110,7 +112,7 @@ export default function ForgehammerCalculator() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm text-gray-400">To Level</label>
+                  <label className="text-sm text-gray-400">{t("calculator.toLevel")}</label>
                   <Select value={toLevel} onChange={(e) => setToLevel(Number(e.target.value))}>
                     {Array.from({ length: 20 }, (_, i) => (
                       <option key={i + 1} value={i + 1}>{i + 1}</option>
@@ -119,7 +121,7 @@ export default function ForgehammerCalculator() {
                 </div>
               </div>
 
-              <Button onClick={handleRequirements} className="w-full">Calculate</Button>
+              <Button onClick={handleRequirements} className="w-full">{t("calculator.calculate")}</Button>
 
               {breakdown && totals && (
                 <motion.div
@@ -131,9 +133,9 @@ export default function ForgehammerCalculator() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-white/10 text-gray-400">
-                        <th className="text-left py-2">Level</th>
-                        <th className="text-right py-2">FH Needed</th>
-                        <th className="text-right py-2">MG Needed</th>
+                        <th className="text-left py-2">{t("calculator.level")}</th>
+                        <th className="text-right py-2">{t("calculator.fhNeeded")}</th>
+                        <th className="text-right py-2">{t("calculator.mgNeeded")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -147,7 +149,7 @@ export default function ForgehammerCalculator() {
                     </tbody>
                     <tfoot>
                       <tr className="border-t border-white/20 font-semibold">
-                        <td className="py-2 text-gray-300">Total</td>
+                        <td className="py-2 text-gray-300">{t("calculator.total")}</td>
                         <td className="text-right py-2 text-[#00c8ff]">{formatNumber(totals.fh)}</td>
                         <td className="text-right py-2 text-[#ff6b35]">{formatNumber(totals.mg)}</td>
                       </tr>
@@ -168,12 +170,12 @@ export default function ForgehammerCalculator() {
         >
           <GlassCard>
             <GlassCardHeader>
-              <GlassCardTitle>Calculate Possible Level</GlassCardTitle>
+              <GlassCardTitle>{t("calculator.calcPossibleLevel")}</GlassCardTitle>
             </GlassCardHeader>
             <GlassCardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm text-gray-400">Available Forgehammer</label>
+                  <label className="text-sm text-gray-400">{t("calculator.availableFH")}</label>
                   <input
                     type="number"
                     min={0}
@@ -184,7 +186,7 @@ export default function ForgehammerCalculator() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm text-gray-400">Available Master's Gear</label>
+                  <label className="text-sm text-gray-400">{t("calculator.availableMG")}</label>
                   <input
                     type="number"
                     min={0}
@@ -196,7 +198,7 @@ export default function ForgehammerCalculator() {
                 </div>
               </div>
 
-              <Button onClick={handlePossible} className="w-full">Calculate</Button>
+              <Button onClick={handlePossible} className="w-full">{t("calculator.calculate")}</Button>
 
               {maxLevel !== null && (
                 <motion.div
@@ -205,7 +207,7 @@ export default function ForgehammerCalculator() {
                   transition={{ duration: 0.3 }}
                   className="text-center py-6"
                 >
-                  <p className="text-gray-400 mb-2">Maximum Level Achievable</p>
+                  <p className="text-gray-400 mb-2">{t("calculator.maxLevelAchievable")}</p>
                   <p className="text-5xl font-bold text-[#00c8ff]">{maxLevel}</p>
                 </motion.div>
               )}

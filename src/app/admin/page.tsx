@@ -7,17 +7,19 @@ import { GlassCard, GlassCardContent, GlassCardTitle } from "@/components/glass-
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { useLocale } from "@/components/language-provider"
 
 const adminSections = [
-  { title: "Users", href: "/admin/users", desc: "Manage user accounts and roles", color: "#00c8ff", count: "0" },
-  { title: "Tools", href: "/admin/tools", desc: "Manage calculators and features", color: "#7c3aed", count: "12" },
-  { title: "Content", href: "/admin/content", desc: "Manage blog posts and guides", color: "#ff6b35", count: "0" },
-  { title: "Database", href: "/admin/database", desc: "Manage heroes, buildings, equipment", color: "#34d399", count: "0" },
-  { title: "Analytics", href: "/admin/analytics", desc: "Platform usage and statistics", color: "#fbbf24", count: "—" },
-  { title: "Feedback", href: "/admin/feedback", desc: "User feedback and reports", color: "#ef4444", count: "0" },
+  { key: "users", href: "/admin/users", color: "#00c8ff", count: "0" },
+  { key: "tools", href: "/admin/tools", color: "#7c3aed", count: "12" },
+  { key: "content", href: "/admin/content", color: "#ff6b35", count: "0" },
+  { key: "database", href: "/admin/database", color: "#34d399", count: "0" },
+  { key: "analytics", href: "/admin/analytics", color: "#fbbf24", count: "—" },
+  { key: "feedback", href: "/admin/feedback", color: "#ef4444", count: "0" },
 ]
 
 export default function AdminPage() {
+  const { t } = useLocale()
   const { data: session, status } = useSession()
 
   if (status === "loading") {
@@ -41,11 +43,11 @@ export default function AdminPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">
-              <span className="gradient-text">Admin Panel</span>
+              <span className="gradient-text">{t("admin.title")}</span>
             </h1>
-            <p className="text-[#a0a0b0] mt-1">Manage your platform</p>
+            <p className="text-[#a0a0b0] mt-1">{t("admin.subtitle")}</p>
           </div>
-          <Badge variant="info">ADMIN</Badge>
+          <Badge variant="info">{t("admin.badge")}</Badge>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -54,23 +56,23 @@ export default function AdminPage() {
               <GlassCard hover>
                 <GlassCardContent>
                   <div className="flex items-start justify-between mb-3">
-                    <GlassCardTitle>{section.title}</GlassCardTitle>
+                    <GlassCardTitle>{t(`admin.sections.${section.key}`)}</GlassCardTitle>
                     <span className="text-2xl font-bold" style={{ color: section.color }}>
                       {section.count}
                     </span>
                   </div>
-                  <p className="text-sm text-[#a0a0b0]">{section.desc}</p>
+                  <p className="text-sm text-[#a0a0b0]">{t(`admin.sections.${section.key}Desc`)}</p>
                 </GlassCardContent>
               </GlassCard>
             </Link>
           ))}
         </div>
 
-        <h2 className="text-xl font-bold mt-12 mb-4">Recent Activity</h2>
+        <h2 className="text-xl font-bold mt-12 mb-4">{t("admin.recentActivity")}</h2>
         <GlassCard>
           <GlassCardContent>
             <div className="text-center py-8 text-[#a0a0b0]">
-              <p>No recent activity to display</p>
+              <p>{t("admin.noActivity")}</p>
             </div>
           </GlassCardContent>
         </GlassCard>

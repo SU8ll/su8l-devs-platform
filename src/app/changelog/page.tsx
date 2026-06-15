@@ -1,20 +1,21 @@
 "use client"
 import { motion } from "framer-motion"
+import { useLocale } from "@/components/language-provider"
 import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardHeader } from "@/components/glass-card"
 import { Badge } from "@/components/ui/badge"
 
-const changes = [
-  { version: "1.0.0", title: "Initial Release", date: "2024-12-01", items: ["Hero Progression Calculator", "Building Upgrade Calculator", "Troop Training Calculator", "VIP Calculator", "Equipment Calculator", "Research Calculator", "User authentication system", "Multi-language support"], type: "major" },
-  { version: "0.9.0", title: "Beta Release", date: "2024-11-15", items: ["Core calculator functionality", "Database system foundations", "Admin panel basics"], type: "beta" },
-]
-
 export default function ChangelogPage() {
+  const { t } = useLocale()
+  const changes = [
+    { version: "1.0.0", title: t("data.changelog1Title"), date: "2024-12-01", items: [t("data.changelog1Item1"), t("data.changelog1Item2"), t("data.changelog1Item3"), t("data.changelog1Item4"), t("data.changelog1Item5"), t("data.changelog1Item6"), t("data.changelog1Item7"), t("data.changelog1Item8")], type: "major" as const },
+    { version: "0.9.0", title: t("data.changelog2Title"), date: "2024-11-15", items: [t("data.changelog2Item1"), t("data.changelog2Item2"), t("data.changelog2Item3")], type: "beta" as const },
+  ]
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-3"><span className="gradient-text">Changelog</span></h1>
-          <p className="text-[#a0a0b0]">Track all updates and improvements</p>
+          <h1 className="text-4xl font-bold mb-3"><span className="gradient-text">{t("changelog.title")}</span></h1>
+          <p className="text-[#a0a0b0]">{t("changelog.desc")}</p>
         </div>
         <div className="space-y-6">
           {changes.map((change) => (
@@ -24,7 +25,7 @@ export default function ChangelogPage() {
                 <div className="flex items-center gap-3">
                   <span className="text-xl font-bold text-[#00c8ff]">v{change.version}</span>
                   <Badge variant={change.type === "major" ? "primary" : "warning"}>
-                    {change.type === "major" ? "Major Update" : "Beta"}
+                    {change.type === "major" ? t("changelog.majorUpdate") : t("changelog.beta")}
                   </Badge>
                 </div>
                 <span className="text-sm text-[#a0a0b0]">{change.date}</span>

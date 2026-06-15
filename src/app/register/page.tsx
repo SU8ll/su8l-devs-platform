@@ -32,7 +32,7 @@ export default function RegisterPage() {
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || "Registration failed")
+        throw new Error(data.error || t("api.registrationFailed"))
       }
 
       const result = await signIn("credentials", {
@@ -97,7 +97,7 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="input-glass w-full"
-                  placeholder="you@example.com"
+                  placeholder={t("login.emailPlaceholder")}
                   required
                 />
               </div>

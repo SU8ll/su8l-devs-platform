@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Select } from "@/components/ui/select"
 import { formatNumber } from "@/lib/utils"
 import { EQUIPMENT_PIECES } from "@/lib/constants"
+import { useLocale } from "@/components/language-provider"
 
 function genCost(base: number, growth: number, maxLevel: number, startAt = 1): number[] {
   return Array.from({ length: maxLevel }, (_, i) => {
@@ -52,15 +53,12 @@ const EQUIPMENT_CONFIG: Record<string, { satin: number[]; threads: number[]; vis
 
 const pieceNames = EQUIPMENT_PIECES
 
-const currentLevelOptions = Array.from({ length: MAX_LEVEL }, (_, i) => ({
-  value: i,
-  label: `Level ${i}`,
-}))
-
-const targetLevelOptions = Array.from({ length: MAX_LEVEL }, (_, i) => ({
-  value: i + 1,
-  label: `Level ${i + 1}`,
-}))
+function getLevelOptions(t: (path: string, params?: Record<string, string>) => string, max: number, offset = 0) {
+  return Array.from({ length: max }, (_, i) => ({
+    value: i + offset,
+    label: t("calculator.levelOption", { level: String(i + offset) }),
+  }))
+}
 
 interface LevelCost {
   level: number
@@ -70,11 +68,14 @@ interface LevelCost {
 }
 
 export default function EquipmentCalculator() {
+  const { t } = useLocale()
   const [selectedPiece, setSelectedPiece] = useState(pieceNames[0])
   const [currentLevel, setCurrentLevel] = useState(0)
   const [targetLevel, setTargetLevel] = useState(1)
   const [results, setResults] = useState<LevelCost[] | null>(null)
 
+  const currentLevelOptions = getLevelOptions(t, MAX_LEVEL, 0)
+  const targetLevelOptions = getLevelOptions(t, MAX_LEVEL, 1)
   const config = EQUIPMENT_CONFIG[selectedPiece]
 
   const handlePieceChange = (value: string) => {
@@ -126,26 +127,26 @@ export default function EquipmentCalculator() {
         animate={{ opacity: 1, y: 0 }}
         className="mx-auto max-w-6xl space-y-6"
       >
-        <h1 className="text-3xl font-bold text-[#00c8ff]">Equipment / Governor Gear Calculator</h1>
+        <h1 className="text-3xl font-bold text-[#00c8ff]">{t("calculator.equipment")}</h1>
 
         <GlassCard>
           <GlassCardHeader>
-            <GlassCardTitle>Configuration</GlassCardTitle>
+            <GlassCardTitle>{t("calculator.configuration")}</GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent className="space-y-5">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Equipment Piece</label>
+                <label className="text-sm text-white/60">{t("calculator.equipmentPiece")}</label>
                 <Select
                   options={pieceNames.map((name) => ({ value: name, label: name }))}
                   value={selectedPiece}
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handlePieceChange(e.target.value)}
                 />
-                <p className="text-xs text-white/40">Max Level: {MAX_LEVEL}</p>
+                <p className="text-xs text-white/40">{t("calculator.maxLevel", { level: String(MAX_LEVEL) })}</p>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Current Level</label>
+                <label className="text-sm text-white/60">{t("calculator.currentLevel")}</label>
                 <Select
                   options={currentLevelOptions}
                   value={currentLevel}
@@ -154,7 +155,7 @@ export default function EquipmentCalculator() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm text-white/60">Target Level</label>
+                <label className="text-sm text-white/60">{t("calculator.targetLevel")}</label>
                 <Select
                   options={targetLevelOptions}
                   value={targetLevel}
@@ -164,7 +165,7 @@ export default function EquipmentCalculator() {
             </div>
 
             <Button onClick={handleCalculate} className="w-full md:w-auto">
-              Calculate
+              {t("calculator.calculate")}
             </Button>
           </GlassCardContent>
         </GlassCard>
@@ -178,17 +179,17 @@ export default function EquipmentCalculator() {
             <GlassCard>
               <GlassCardHeader>
                 <GlassCardTitle>
-                  {selectedPiece}: Level {currentLevel} &rarr; {targetLevel}
+                  {t("calculator.pieceLabel", { piece: selectedPiece, from: String(currentLevel), to: String(targetLevel) })}
                 </GlassCardTitle>
               </GlassCardHeader>
               <GlassCardContent className="overflow-x-auto">
                 <table className="w-full text-sm border-collapse">
                   <thead>
                     <tr className="border-b border-white/10 text-white/50 text-xs uppercase tracking-wider">
-                      <th className="p-3 text-left font-medium">Level</th>
-                      <th className="p-3 text-right font-medium">Satin</th>
-                      <th className="p-3 text-right font-medium">Threads</th>
-                      <th className="p-3 text-right font-medium">Artisan&apos;s Visions</th>
+                      <th className="p-3 text-left font-medium">{t("calculator.level")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.satin")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.threads")}</th>
+                      <th className="p-3 text-right font-medium">{t("calculator.artisansVisions")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -204,7 +205,7 @@ export default function EquipmentCalculator() {
                       </tr>
                     ))}
                     <tr className="border-t-2 border-[#00c8ff]/30 bg-[#00c8ff]/5 font-semibold">
-                      <td className="p-3 text-[#00c8ff]">Total</td>
+                      <td className="p-3 text-[#00c8ff]">{t("calculator.total")}</td>
                       <td className="p-3 text-right text-[#00c8ff]">{formatNumber(totals.satin)}</td>
                       <td className="p-3 text-right text-[#ff6b35]">{formatNumber(totals.threads)}</td>
                       <td className="p-3 text-right text-[#7c3aed]">{formatNumber(totals.visions)}</td>
@@ -216,25 +217,25 @@ export default function EquipmentCalculator() {
 
             <GlassCard>
               <GlassCardHeader>
-                <GlassCardTitle>Summary &mdash; {selectedPiece}</GlassCardTitle>
+                <GlassCardTitle>{t("calculator.summary")} &mdash; {selectedPiece}</GlassCardTitle>
               </GlassCardHeader>
               <GlassCardContent>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div className="rounded-xl border border-[#00c8ff]/20 bg-[#00c8ff]/5 p-4 text-center">
-                    <p className="text-xs text-white/50 uppercase tracking-wider mb-1">Satin</p>
+                    <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{t("calculator.satin")}</p>
                     <p className="text-2xl font-bold text-[#00c8ff]">{formatNumber(totals.satin)}</p>
                   </div>
                   <div className="rounded-xl border border-[#ff6b35]/20 bg-[#ff6b35]/5 p-4 text-center">
-                    <p className="text-xs text-white/50 uppercase tracking-wider mb-1">Threads</p>
+                    <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{t("calculator.threads")}</p>
                     <p className="text-2xl font-bold text-[#ff6b35]">{formatNumber(totals.threads)}</p>
                   </div>
                   <div className="rounded-xl border border-[#7c3aed]/20 bg-[#7c3aed]/5 p-4 text-center">
-                    <p className="text-xs text-white/50 uppercase tracking-wider mb-1">Artisan&apos;s Visions</p>
+                    <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{t("calculator.artisansVisions")}</p>
                     <p className="text-2xl font-bold text-[#7c3aed]">{formatNumber(totals.visions)}</p>
                   </div>
                 </div>
                 <p className="mt-4 text-center text-sm text-white/40">
-                  Total levels upgraded: {targetLevel - currentLevel}
+                  {t("calculator.total")} {t("calculator.level")}s: {targetLevel - currentLevel}
                 </p>
               </GlassCardContent>
             </GlassCard>

@@ -69,10 +69,10 @@ export function Footer() {
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="https://discord.gg/VYQjs6wWnN" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">Discord</a>
-            <a href="https://www.instagram.com/3erdo?igsh=d2RhdWZlZHpkZmFl&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">Instagram</a>
-            <a href="https://www.tiktok.com/@b8n?_r=1&_t=ZS-97BFIcjmVGf" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">TikTok</a>
-            <a href="https://wa.me/966561261377" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">WhatsApp</a>
+            <a href="https://discord.gg/VYQjs6wWnN" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">{t("social.discord")}</a>
+            <a href="https://www.instagram.com/3erdo?igsh=d2RhdWZlZHpkZmFl&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">{t("social.instagram")}</a>
+            <a href="https://www.tiktok.com/@b8n?_r=1&_t=ZS-97BFIcjmVGf" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">{t("social.tiktok")}</a>
+            <a href="https://wa.me/966561261377" target="_blank" rel="noopener noreferrer" className="text-[#a0a0b0] hover:text-[#00c8ff] transition-colors text-sm">{t("social.whatsapp")}</a>
           </div>
         </div>
 

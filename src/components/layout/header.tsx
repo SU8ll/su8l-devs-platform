@@ -24,7 +24,7 @@ export function Header() {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00c8ff] to-[#7c3aed] flex items-center justify-center text-sm font-bold">
             S
           </div>
-          <span className="font-bold text-lg hidden sm:block">SU8L DEvs</span>
+          <span className="font-bold text-lg hidden sm:block">{t("site.name")}</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
@@ -54,8 +54,23 @@ export function Header() {
                       className="block px-4 py-2 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5"
                     >
                       {t(`nav.${item.label.toLowerCase().replace(/\s+/g, '')}`)}
-                </Link>
-              ))}
+                    </Link>
+                  ))}
+                  <div className="border-t border-white/5 my-1" />
+                  <Link
+                    href="/redeem"
+                    className="block px-4 py-2 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5"
+                  >
+                    {t("redeem.title")}
+                  </Link>
+                  {(session?.user?.role === "ADMIN" || session?.user?.role === "OWNER") && (
+                    <Link
+                      href="/manage"
+                      className="block px-4 py-2 text-sm text-[#00c8ff] hover:text-white hover:bg-white/5"
+                    >
+                      {t("manage.title")}
+                    </Link>
+                  )}
             </div>
           </div>
         </nav>
@@ -69,9 +84,9 @@ export function Header() {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
               >
                 <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#00c8ff] to-[#7c3aed] flex items-center justify-center text-xs font-bold">
-                  {session.user?.name?.[0] ?? "U"}
+                  {session.user?.name?.[0] ?? t("fallback.userInitial")}
                 </div>
-                <span className="text-sm hidden sm:block">{session.user?.name ?? "User"}</span>
+                <span className="text-sm hidden sm:block">{session.user?.name ?? t("fallback.user")}</span>
               </button>
               {profileOpen && (
                 <div className="absolute top-full right-0 mt-2 w-48 py-2 glass-card">
@@ -80,13 +95,22 @@ export function Header() {
                     onClick={() => setProfileOpen(false)}
                     className="block px-4 py-2 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5"
                   >
-                    Dashboard
+                    {t("nav.dashboard")}
                   </Link>
+                  {(session?.user?.role === "ADMIN" || session?.user?.role === "OWNER") && (
+                    <Link
+                      href="/manage"
+                      onClick={() => setProfileOpen(false)}
+                      className="block px-4 py-2 text-sm text-[#00c8ff] hover:text-white hover:bg-white/5"
+                    >
+                      {t("manage.title")}
+                    </Link>
+                  )}
                   <button
                     onClick={() => { signOut(); setProfileOpen(false) }}
                     className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/5"
                   >
-                    Sign Out
+                    {t("nav.signOut")}
                   </button>
                 </div>
               )}
@@ -119,21 +143,37 @@ export function Header() {
       {mobileOpen && (
         <div className="lg:hidden glass-card mx-4 mt-2 p-4">
           <nav className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "px-3 py-2 rounded-lg text-sm transition-colors",
-                  pathname === item.href
-                    ? "text-[#00c8ff] bg-[#00c8ff]/10"
-                    : "text-[#a0a0b0] hover:text-white hover:bg-white/5"
-                )}
-              >
-                  {t(`nav.${item.label.toLowerCase().replace(/\s+/g, '')}`)}
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    "px-3 py-2 rounded-lg text-sm transition-colors",
+                    pathname === item.href
+                      ? "text-[#00c8ff] bg-[#00c8ff]/10"
+                      : "text-[#a0a0b0] hover:text-white hover:bg-white/5"
+                  )}
+                >
+                    {t(`nav.${item.label.toLowerCase().replace(/\s+/g, '')}`)}
+                  </Link>
+                ))}
+                <Link
+                  href="/redeem"
+                  onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2 rounded-lg text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5"
+                >
+                  {t("redeem.title")}
                 </Link>
-              ))}
+                {(session?.user?.role === "ADMIN" || session?.user?.role === "OWNER") && (
+                  <Link
+                    href="/manage"
+                    onClick={() => setMobileOpen(false)}
+                    className="px-3 py-2 rounded-lg text-sm text-[#00c8ff] hover:text-white hover:bg-white/5"
+                  >
+                    {t("manage.title")}
+                  </Link>
+                )}
             </nav>
           <div className="mt-3 pt-3 border-t border-white/5 flex justify-center">
             <LanguageSwitcher />

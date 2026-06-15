@@ -52,9 +52,9 @@ export default function CommunityPage() {
             </p>
             <div className="flex justify-center gap-4">
               <a href="https://discord.gg/VYQjs6wWnN" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">{t("community.discord")}</span></GlassCard></a>
-              <a href="https://www.instagram.com/3erdo?igsh=d2RhdWZlZHpkZmFl&utm_source=qr" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">Instagram</span></GlassCard></a>
-              <a href="https://www.tiktok.com/@b8n?_r=1&_t=ZS-97BFIcjmVGf" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">TikTok</span></GlassCard></a>
-              <a href="https://wa.me/966561261377" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">WhatsApp</span></GlassCard></a>
+              <a href="https://www.instagram.com/3erdo?igsh=d2RhdWZlZHpkZmFl&utm_source=qr" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">{t("social.instagram")}</span></GlassCard></a>
+              <a href="https://www.tiktok.com/@b8n?_r=1&_t=ZS-97BFIcjmVGf" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">{t("social.tiktok")}</span></GlassCard></a>
+              <a href="https://wa.me/966561261377" target="_blank" rel="noopener noreferrer"><GlassCard hover className="px-6 py-3"><span className="font-semibold">{t("social.whatsapp")}</span></GlassCard></a>
             </div>
           </GlassCardContent>
         </GlassCard>

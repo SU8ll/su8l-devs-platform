@@ -2,29 +2,30 @@
 import { motion } from "framer-motion"
 import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardHeader } from "@/components/glass-card"
 import { Badge } from "@/components/ui/badge"
-
-const tools = [
-  { name: "Hero Progression", status: "active", usage: "High", slug: "hero-progression" },
-  { name: "Building Upgrade", status: "active", usage: "High", slug: "building-upgrade" },
-  { name: "Troop Training", status: "active", usage: "Medium", slug: "training" },
-  { name: "VIP Calculator", status: "active", usage: "High", slug: "vip" },
-  { name: "Equipment Calculator", status: "active", usage: "Medium", slug: "equipment" },
-  { name: "Research Calculator", status: "active", usage: "Low", slug: "research" },
-  { name: "Forgehammer", status: "active", usage: "Low", slug: "forgehammer" },
-  { name: "Governor Gear", status: "active", usage: "Medium", slug: "governor-gear" },
-  { name: "Master Calculator", status: "active", usage: "Low", slug: "master" },
-  { name: "Pet Calculator", status: "active", usage: "Low", slug: "pet" },
-  { name: "War Academy", status: "active", usage: "Low", slug: "war-academy" },
-  { name: "Resource Calculator", status: "active", usage: "Medium", slug: "resource" },
-  { name: "Event Calculator", status: "active", usage: "Low", slug: "event" },
-]
+import { useLocale } from "@/components/language-provider"
 
 export default function AdminToolsPage() {
+  const { t } = useLocale()
+  const tools = [
+    { name: t("admin.tools.heroProgression"), status: "active", usage: "High", slug: "hero-progression" },
+    { name: t("admin.tools.buildingUpgrade"), status: "active", usage: "High", slug: "building-upgrade" },
+    { name: t("admin.tools.troopTraining"), status: "active", usage: "Medium", slug: "training" },
+    { name: t("admin.tools.vipCalculator"), status: "active", usage: "High", slug: "vip" },
+    { name: t("admin.tools.equipmentCalculator"), status: "active", usage: "Medium", slug: "equipment" },
+    { name: t("admin.tools.researchCalculator"), status: "active", usage: "Low", slug: "research" },
+    { name: t("admin.tools.forgehammer"), status: "active", usage: "Low", slug: "forgehammer" },
+    { name: t("admin.tools.governorGear"), status: "active", usage: "Medium", slug: "governor-gear" },
+    { name: t("admin.tools.masterCalculator"), status: "active", usage: "Low", slug: "master" },
+    { name: t("admin.tools.petCalculator"), status: "active", usage: "Low", slug: "pet" },
+    { name: t("admin.tools.warAcademy"), status: "active", usage: "Low", slug: "war-academy" },
+    { name: t("admin.tools.resourceCalculator"), status: "active", usage: "Medium", slug: "resource" },
+    { name: t("admin.tools.eventCalculator"), status: "active", usage: "Low", slug: "event" },
+  ]
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-bold mb-2"><span className="gradient-text">Tools Management</span></h1>
-        <p className="text-[#a0a0b0] mb-8">Manage calculators and features</p>
+        <h1 className="text-3xl font-bold mb-2"><span className="gradient-text">{t("admin.tools.title")}</span></h1>
+        <p className="text-[#a0a0b0] mb-8">{t("admin.tools.desc")}</p>
 
         <GlassCard>
           <GlassCardContent>
@@ -32,10 +33,10 @@ export default function AdminToolsPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th className="text-left py-3 px-4 text-[#a0a0b0]">Tool</th>
-                    <th className="text-left py-3 px-4 text-[#a0a0b0]">Slug</th>
-                    <th className="text-left py-3 px-4 text-[#a0a0b0]">Status</th>
-                    <th className="text-left py-3 px-4 text-[#a0a0b0]">Usage</th>
+                    <th className="text-left py-3 px-4 text-[#a0a0b0]">{t("admin.tools.tableTool")}</th>
+                    <th className="text-left py-3 px-4 text-[#a0a0b0]">{t("admin.tools.tableSlug")}</th>
+                    <th className="text-left py-3 px-4 text-[#a0a0b0]">{t("admin.tools.tableStatus")}</th>
+                    <th className="text-left py-3 px-4 text-[#a0a0b0]">{t("admin.tools.tableUsage")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -44,11 +45,11 @@ export default function AdminToolsPage() {
                       <td className="py-3 px-4 font-medium">{tool.name}</td>
                       <td className="py-3 px-4 text-[#a0a0b0]">{tool.slug}</td>
                       <td className="py-3 px-4">
-                        <Badge variant="success">Active</Badge>
+                        <Badge variant="success">{t("admin.tools.active")}</Badge>
                       </td>
                       <td className="py-3 px-4">
                         <Badge variant={tool.usage === "High" ? "primary" : tool.usage === "Medium" ? "warning" : "info"}>
-                          {tool.usage}
+                          {t(`admin.tools.${tool.usage.toLowerCase()}`)}
                         </Badge>
                       </td>
                     </tr>

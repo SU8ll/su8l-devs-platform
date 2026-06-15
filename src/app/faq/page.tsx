@@ -5,56 +5,7 @@ import { useState } from "react"
 import { GlassCard, GlassCardContent } from "@/components/glass-card"
 import { useLocale } from "@/components/language-provider"
 
-const faqs = [
-  {
-    q: "What is SU8L DEVs?",
-    a: "SU8L DEVs is a fan-made companion platform providing advanced calculators, databases, planning tools, and Discord bots for strategy games, primarily Kingshot. Our tools help players optimize hero progression, building upgrades, resource management, and more.",
-  },
-  {
-    q: "Are the calculators accurate?",
-    a: "Yes, our calculators are built on verified formulas from Kingshot.net and are regularly updated to match the latest game versions. However, game mechanics may change with updates, so always double-check critical values in-game.",
-  },
-  {
-    q: "How do I get the SU8L Discord bot?",
-    a: "The SU8L Bot is available through our Discord server. Join our community at discord.gg/VYQjs6wWnN and open a ticket to request access. A staff member will help you set it up for your server.",
-  },
-  {
-    q: "Is there a mobile app?",
-    a: "Currently, SU8L DEVs is a web-based platform optimized for both desktop and mobile browsers. We may consider a native app in the future based on community demand.",
-  },
-  {
-    q: "Is SU8L DEVs free to use?",
-    a: "Yes, all our tools and calculators are completely free. We may offer optional donations to support development, but all core features will always remain free.",
-  },
-  {
-    q: "How do I report a bug or suggest a feature?",
-    a: "You can submit feedback directly on our website through the Community > Feedback page, or join our Discord server and post in the suggestions or bug-report channels.",
-  },
-  {
-    q: "Why do I need to verify my email?",
-    a: "Email verification helps us prevent spam accounts and ensures that you can recover your account if you forget your password. Your email is never shared with third parties.",
-  },
-  {
-    q: "I didn't receive the verification email. What should I do?",
-    a: "Check your spam or junk folder first. If it's not there, try registering again with the same email — the system will resend the verification link. Make sure you entered the correct email address.",
-  },
-  {
-    q: "How do I delete my account?",
-    a: "You can request account deletion by contacting us through our Discord server or WhatsApp. We will process your request within 7 days.",
-  },
-  {
-    q: "Do you store my personal data?",
-    a: "We only store the minimum data necessary to operate our services (email, username). We do not share, sell, or transfer your data to third parties. See our Privacy Policy for details.",
-  },
-  {
-    q: "What games do you support?",
-    a: "Our primary focus is Kingshot. We may expand to other strategy games based on community interest and developer capacity.",
-  },
-  {
-    q: "How can I support the project?",
-    a: "You can support us by joining our Discord community, submitting feedback, reporting bugs, sharing the platform with others, or making a donation through our support channels.",
-  },
-]
+const faqKeys = Array.from({ length: 12 }, (_, i) => i + 1)
 
 export default function FAQPage() {
   const { t } = useLocale()
@@ -77,7 +28,7 @@ export default function FAQPage() {
           </motion.div>
 
           <div className="space-y-3">
-            {faqs.map((faq, i) => (
+            {faqKeys.map((_, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
@@ -90,7 +41,7 @@ export default function FAQPage() {
                 >
                   <GlassCardContent className="py-4 px-6">
                     <div className="flex items-center justify-between gap-4">
-                      <h3 className="font-semibold text-white text-sm sm:text-base">{faq.q}</h3>
+                      <h3 className="font-semibold text-white text-sm sm:text-base">{t(`faq.q${i + 1}`)}</h3>
                       <svg
                         className={`w-5 h-5 shrink-0 text-[#a0a0b0] transition-transform duration-300 ${openIndex === i ? "rotate-180" : ""}`}
                         fill="none"
@@ -107,7 +58,7 @@ export default function FAQPage() {
                         transition={{ duration: 0.3 }}
                         className="mt-4 pt-4 border-t border-white/5"
                       >
-                        <p className="text-sm text-[#a0a0b0] leading-relaxed">{faq.a}</p>
+                        <p className="text-sm text-[#a0a0b0] leading-relaxed">{t(`faq.a${i + 1}`)}</p>
                       </motion.div>
                     )}
                   </GlassCardContent>

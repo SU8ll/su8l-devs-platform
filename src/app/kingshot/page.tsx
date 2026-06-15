@@ -16,16 +16,16 @@ export default function KingshotPage() {
   const { t } = useLocale()
 
   const categories = [
-    { key: "all", label: "All", icon: "⭐" },
-    { key: "heroes", label: "Heroes", icon: "⚔️" },
-    { key: "buildings", label: "Buildings", icon: "🏗️" },
-    { key: "military", label: "Military", icon: "🛡️" },
-    { key: "gear", label: "Gear", icon: "🔨" },
-    { key: "tech", label: "Tech", icon: "🔬" },
-    { key: "premium", label: "Premium", icon: "👑" },
-    { key: "economy", label: "Economy", icon: "💰" },
-    { key: "pets", label: "Pets", icon: "🐾" },
-    { key: "events", label: "Events", icon: "📅" },
+    { key: "all", label: t("kingshot.categoryAll"), icon: "⭐" },
+    { key: "heroes", label: t("kingshot.categoryHeroes"), icon: "⚔️" },
+    { key: "buildings", label: t("kingshot.categoryBuildings"), icon: "🏗️" },
+    { key: "military", label: t("kingshot.categoryMilitary"), icon: "🛡️" },
+    { key: "gear", label: t("kingshot.categoryGear"), icon: "🔨" },
+    { key: "tech", label: t("kingshot.categoryTech"), icon: "🔬" },
+    { key: "premium", label: t("kingshot.categoryPremium"), icon: "👑" },
+    { key: "economy", label: t("kingshot.categoryEconomy"), icon: "💰" },
+    { key: "pets", label: t("kingshot.categoryPets"), icon: "🐾" },
+    { key: "events", label: t("kingshot.categoryEvents"), icon: "📅" },
   ]
 
   const sections = [
@@ -82,7 +82,7 @@ export default function KingshotPage() {
                     </div>
                     <GlassCardContent className="flex-1">
                       <p className="mb-3 text-sm text-[#a0a0b0]">{s.desc}</p>
-                      <Badge variant="secondary">{s.tools} tools</Badge>
+                      <Badge variant="secondary">{t("kingshot.toolsCount", { count: String(s.tools) })}</Badge>
                     </GlassCardContent>
                   </GlassCard>
                 </Link>
@@ -108,10 +108,10 @@ export default function KingshotPage() {
                       <GlassCardTitle>{tool.title}</GlassCardTitle>
                     </div>
                     <GlassCardContent className="flex-1">
-                      <p className="text-sm text-[#a0a0b0]">Calculate and optimize your {tool.title.toLowerCase()} with precision.</p>
+                      <p className="text-sm text-[#a0a0b0]">{t("calculator.calculate")} {tool.title.toLowerCase()}</p>
                     </GlassCardContent>
                     <div className="mt-4 flex items-center gap-2 text-xs text-[#ff6b35]">
-                      <span>Calculate</span>
+                      <span>{t("calculator.calculate")}</span>
                       <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                     </div>
                   </GlassCard>
