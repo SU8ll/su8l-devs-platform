@@ -2,6 +2,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useSession, signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
 import { NAV_ITEMS } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
@@ -10,8 +11,10 @@ import { useLocale } from "@/components/language-provider"
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
   const pathname = usePathname()
   const { t } = useLocale()
+  const { data: session, status } = useSession()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -59,12 +62,45 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <Link href="/login">
-            <Button variant="ghost" size="sm">{t("nav.signIn")}</Button>
-          </Link>
-          <Link href="/register">
-            <Button size="sm">{t("nav.getStarted")}</Button>
-          </Link>
+          {status === "authenticated" ? (
+            <div className="relative">
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+              >
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#00c8ff] to-[#7c3aed] flex items-center justify-center text-xs font-bold">
+                  {session.user?.name?.[0] ?? "U"}
+                </div>
+                <span className="text-sm hidden sm:block">{session.user?.name ?? "User"}</span>
+              </button>
+              {profileOpen && (
+                <div className="absolute top-full right-0 mt-2 w-48 py-2 glass-card">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setProfileOpen(false)}
+                    className="block px-4 py-2 text-sm text-[#a0a0b0] hover:text-white hover:bg-white/5"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => { signOut(); setProfileOpen(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/5"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" size="sm">{t("nav.signIn")}</Button>
+              </Link>
+              <Link href="/register">
+                <Button size="sm">{t("nav.getStarted")}</Button>
+              </Link>
+            </>
+          )}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-2 rounded-lg hover:bg-white/5"

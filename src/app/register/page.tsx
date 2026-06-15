@@ -2,6 +2,7 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { GlassCard, GlassCardContent } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
@@ -15,7 +16,6 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [registered, setRegistered] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,45 +35,23 @@ export default function RegisterPage() {
         throw new Error(data.error || "Registration failed")
       }
 
-      setRegistered(true)
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        router.push("/login")
+      } else {
+        router.push("/dashboard")
+        router.refresh()
+      }
     } catch (err: any) {
       setError(err.message)
     } finally {
       setLoading(false)
     }
-  }
-
-  if (registered) {
-    return (
-      <div className="min-h-[80vh] flex items-center justify-center px-4 py-16">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md"
-        >
-          <GlassCard className="p-8 text-center">
-            <GlassCardContent>
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#00c8ff] to-[#7c3aed] flex items-center justify-center text-3xl">
-                ✉️
-              </div>
-              <h1 className="text-2xl font-bold mb-3">{t("register.checkEmail")}</h1>
-              <p className="text-[#a0a0b0] text-sm mb-6 leading-relaxed">
-                {t("register.checkEmailText").replace("{email}", email)}
-              </p>
-              <p className="text-[#a0a0b0] text-xs mb-8">
-                {t("register.didntGet")}{" "}
-                <button onClick={() => setRegistered(false)} className="text-[#00c8ff] hover:underline">
-                  {t("register.tryAgain")}
-                </button>
-              </p>
-              <Link href="/login">
-                <Button variant="ghost" size="sm">{t("register.goToSignIn")}</Button>
-              </Link>
-            </GlassCardContent>
-          </GlassCard>
-        </motion.div>
-      </div>
-    )
   }
 
   return (
