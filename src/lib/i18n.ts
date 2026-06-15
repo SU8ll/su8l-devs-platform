@@ -643,6 +643,8 @@ export const translations: Translations = {
       uses: "Uses",
       created: "Created",
       expires: "Expires",
+      moduleEnabled: "Enabled",
+      moduleDisabled: "Disabled",
     },
     bot: {
       badge: "Kingshot Companion Bot",
@@ -1492,6 +1494,8 @@ export const translations: Translations = {
       uses: "الاستخدامات",
       created: "تاريخ الإنشاء",
       expires: "ينتهي",
+      moduleEnabled: "مفعل",
+      moduleDisabled: "معطل",
     },
     bot: {
       badge: "بوت Kingshot المساعد",
@@ -2440,6 +2444,8 @@ export const translations: Translations = {
       uses: "Nutzungen",
       created: "Erstellt",
       expires: "Läuft ab",
+      moduleEnabled: "Aktiviert",
+      moduleDisabled: "Deaktiviert",
     },
     bot: {
       badge: "Kingshot Companion Bot",
@@ -3388,6 +3394,8 @@ export const translations: Translations = {
       uses: "Kullanım",
       created: "Oluşturulma",
       expires: "Bitiş",
+      moduleEnabled: "Etkin",
+      moduleDisabled: "Devre Dışı",
     },
     bot: {
       badge: "Kingshot Yardımcı Botu",

@@ -352,3 +352,35 @@ model Changelog {
 
   @@map("changelogs")
 }
+
+model BotServer {
+  id          String   @id @default(cuid())
+  discordId   String   @unique
+  name        String
+  icon        String?
+  memberCount Int      @default(0)
+  prefix      String   @default("!")
+  language    String   @default("en")
+  isPremium   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  modules BotModule[]
+
+  @@map("bot_servers")
+}
+
+model BotModule {
+  id        String   @id @default(cuid())
+  serverId  String
+  key       String
+  enabled   Boolean  @default(true)
+  settings  Json?   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  server BotServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  @@unique([serverId, key])
+  @@map("bot_modules")
+}
