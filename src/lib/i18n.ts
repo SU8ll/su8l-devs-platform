@@ -338,6 +338,7 @@ export const translations: Translations = {
       commingSoon: "Coming Soon",
       learnMore: "Learn More",
       getStarted: "Get Started",
+      openTicket: "Open Ticket",
     },
   },
 
@@ -663,6 +664,7 @@ export const translations: Translations = {
       commingSoon: "قريباً",
       learnMore: "اعرف المزيد",
       getStarted: "ابدأ الآن",
+      openTicket: "فتح تذكرة",
     },
   },
 
@@ -988,6 +990,7 @@ export const translations: Translations = {
       commingSoon: "Demnächst",
       learnMore: "Mehr erfahren",
       getStarted: "Loslegen",
+      openTicket: "Ticket öffnen",
     },
   },
 
@@ -1313,6 +1316,7 @@ export const translations: Translations = {
       commingSoon: "Çok Yakında",
       learnMore: "Daha Fazla Bilgi",
       getStarted: "Başla",
+      openTicket: "Bilet Aç",
     },
   },
 }

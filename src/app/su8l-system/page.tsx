@@ -225,9 +225,11 @@ export default function SU8LSystemPage() {
                       </li>
                     ))}
                   </ul>
-                  <Button className={`w-full ${isPopular ? "bg-violet-600 hover:bg-violet-700" : "bg-white/10 hover:bg-white/20"}`} variant={isPopular ? "primary" : "secondary"}>
-                    {ts("getStarted")}
-                  </Button>
+                  <a href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer">
+                    <Button className={`w-full ${isPopular ? "bg-violet-600 hover:bg-violet-700" : "bg-white/10 hover:bg-white/20"}`} variant={isPopular ? "primary" : "secondary"}>
+                      {ts("openTicket")}
+                    </Button>
+                  </a>
                 </motion.div>
               )
             })}
