@@ -7,12 +7,10 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 function createPool() {
-  const url = new URL(process.env.DATABASE_URL ?? "postgres://localhost:5432/postgres")
-  url.searchParams.delete("sslmode")
-  return new pg.Pool({
-    connectionString: url.toString(),
-    ssl: { rejectUnauthorized: false },
-  })
+  const connString = process.env.DATABASE_URL
+  if (!connString) throw new Error("DATABASE_URL is not set")
+  const sslConnString = connString.replace("sslmode=require", "sslmode=no-verify")
+  return new pg.Pool({ connectionString: sslConnString })
 }
 
 export const prisma =
