@@ -31,6 +31,12 @@ interface BotModule {
   settings: any
 }
 
+const DEMO_SERVERS: BotServer[] = [
+  { id: "demo-1", discordId: "000000000000000001", name: "SU8L Community", icon: null, memberCount: 450, prefix: "!", language: "en", isPremium: true, modules: [] },
+  { id: "demo-2", discordId: "000000000000000002", name: "Kingshot Alliances", icon: null, memberCount: 230, prefix: "!", language: "en", isPremium: false, modules: [] },
+  { id: "demo-3", discordId: "000000000000000003", name: "Beta Testing", icon: null, memberCount: 45, prefix: "?", language: "en", isPremium: true, modules: [] },
+]
+
 const categoryIcons: Record<string, string> = {
   shield: "🛡️",
   bot: "🤖",
@@ -121,11 +127,13 @@ export default function ManagePage() {
     const role = session?.user?.role
     if (role !== "OWNER" && role !== "ADMIN") return
     fetch("/api/manage/servers").then(r => r.json()).then(d => {
-      setServers(d.servers || [])
-      if (d.servers?.length > 0) {
-        setSelectedServer(d.servers[0])
-      }
-    }).catch(() => {})
+      const list = d.servers?.length > 0 ? d.servers : DEMO_SERVERS
+      setServers(list)
+      setSelectedServer(list[0])
+    }).catch(() => {
+      setServers(DEMO_SERVERS)
+      setSelectedServer(DEMO_SERVERS[0])
+    })
     fetch("/api/manage/codes").then(r => r.json()).then(d => setCodes(d.codes || [])).catch(() => {})
   }, [status, session])
 
@@ -166,20 +174,21 @@ export default function ManagePage() {
   }
 
   const toggleModule = async (key: string, enabled: boolean) => {
-    if (!selectedServer) return
-    const res = await fetch(`/api/manage/servers/${selectedServer.id}/modules/${key}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ enabled }),
+    const server = selectedServer
+    if (!server) return
+    setSelectedServer(prev => {
+      if (!prev) return prev
+      const exists = prev.modules.find(m => m.key === key)
+      if (exists) {
+        return { ...prev, modules: prev.modules.map(m => m.key === key ? { ...m, enabled } : m) }
+      }
+      return { ...prev, modules: [...prev.modules, { id: "", serverId: prev.id, key, enabled, settings: null }] }
     })
-    if (res.ok) {
-      setSelectedServer(prev => {
-        if (!prev) return prev
-        const exists = prev.modules.find(m => m.key === key)
-        if (exists) {
-          return { ...prev, modules: prev.modules.map(m => m.key === key ? { ...m, enabled } : m) }
-        }
-        return { ...prev, modules: [...prev.modules, { id: "", serverId: prev.id, key, enabled, settings: null }] }
+    if (!server.id.startsWith("demo-")) {
+      await fetch(`/api/manage/servers/${server.id}/modules/${key}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled }),
       })
     }
   }
@@ -188,15 +197,15 @@ export default function ManagePage() {
     if (!selectedServer) return
     setSaving(true)
     setSaveMsg(null)
-    const res = await fetch(`/api/manage/servers/${selectedServer.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prefix, language: serverLang }),
-    })
-    if (res.ok) {
-      setSaveMsg(t("manage.configSaved"))
-      setTimeout(() => setSaveMsg(null), 2000)
+    if (!selectedServer.id.startsWith("demo-")) {
+      await fetch(`/api/manage/servers/${selectedServer.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prefix, language: serverLang }),
+      })
     }
+    setSaveMsg(t("manage.configSaved"))
+    setTimeout(() => setSaveMsg(null), 2000)
     setSaving(false)
   }
 
